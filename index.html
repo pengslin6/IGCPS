@@ -157,7 +157,7 @@ document.getElementById('correctFilter').addEventListener('change',applyFilters)
 
 function debounce(fn,ms){let t;return function(...a){clearTimeout(t);t=setTimeout(()=>fn(...a),ms);};}
 
-fetch('data.txt').then(r=>r.text()).then(text=>{
+fetch('traceback_report.txt').then(r=>r.text()).then(text=>{
   parseData(text);
   filtered=samples;
   document.getElementById('resultCount').textContent=filtered.length+' samples';
