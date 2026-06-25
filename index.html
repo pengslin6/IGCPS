@@ -22,6 +22,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .controls input[type="text"]{flex:1;min-width:180px;padding:.55rem .9rem;border:1px solid #ddd;border-radius:6px;font-size:.88rem}
 .controls select{padding:.55rem .9rem;border:1px solid #ddd;border-radius:6px;font-size:.88rem;background:#fff}
 .count{font-size:.82rem;color:#666;margin-left:auto}
+.code-links{background:#fff;border-radius:8px;padding:1rem;margin-bottom:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.code-links h2{font-size:1rem;margin-bottom:.7rem;color:#1a237e}
+.code-links a{display:inline-block;margin:.25rem .7rem .25rem 0;padding:.45rem .75rem;border-radius:6px;background:#eef2ff;color:#1a237e;text-decoration:none;font-size:.86rem;font-weight:600}
+.code-links a:hover{background:#dfe6ff}
 .sample-list{display:flex;flex-direction:column;gap:.7rem}
 .sample-card{background:#fff;border-radius:8px;padding:.9rem 1.1rem;box-shadow:0 2px 6px rgba(0,0,0,.06);border-left:4px solid #ccc}
 .sample-card.NS{border-left-color:#ff9800}.sample-card.NM{border-left-color:#f44336}
@@ -49,23 +53,29 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.78rem}
 <body>
 <div class="header">
 <h1>HGAN-Trace: Anomaly Traceback Report</h1>
-<p>Complete per-sample root cause analysis for all 3,770 anomaly samples in the IGCPS dataset</p>
+<p>Per-sample root cause analysis for the chronological IGCPS test split</p>
 </div>
 <div class="container">
 <div class="stats-grid">
-<div class="stat-card"><div class="value">10,255</div><div class="label">Total Samples</div></div>
-<div class="stat-card"><div class="value">3,770</div><div class="label">Anomaly Samples</div></div>
-<div class="stat-card"><div class="value">98.62%</div><div class="label">Classification Accuracy</div></div>
-<div class="stat-card"><div class="value">100.00%</div><div class="label">RCA Accuracy</div></div>
+<div class="stat-card"><div class="value">2,054</div><div class="label">Test Samples</div></div>
+<div class="stat-card"><div class="value">757</div><div class="label">Anomaly Samples</div></div>
+<div class="stat-card"><div class="value">81.84%</div><div class="label">Classification Accuracy</div></div>
+<div class="stat-card"><div class="value">75.17%</div><div class="label">RCA Accuracy</div></div>
 </div>
 <div class="class-stats"><table>
 <tr><th>Class</th><th>Description</th><th>True</th><th>Predicted</th><th>Correct</th><th>Accuracy</th></tr>
-<tr><td><span class="badge NS">NS</span></td><td>Physical Fault - Sensor</td><td>493</td><td>479</td><td>479</td><td>97.16%</td></tr>
-<tr><td><span class="badge NM">NM</span></td><td>Physical Fault - Mechanical</td><td>442</td><td>355</td><td>354</td><td>80.09%</td></tr>
-<tr><td><span class="badge PM">PM</span></td><td>Parameter Spoofing (Mechanical)</td><td>1,337</td><td>1,417</td><td>1,337</td><td>100.00%</td></tr>
-<tr><td><span class="badge PS">PS</span></td><td>Parameter Spoofing (Sensor)</td><td>197</td><td>217</td><td>195</td><td>98.98%</td></tr>
-<tr><td><span class="badge SS">SS</span></td><td>Shutdown Attack</td><td>1,301</td><td>1,292</td><td>1,290</td><td>99.15%</td></tr>
+<tr><td><span class="badge NS">NS</span></td><td>Physical Fault - Sensor</td><td>99</td><td>47</td><td>47</td><td>47.47%</td></tr>
+<tr><td><span class="badge NM">NM</span></td><td>Physical Fault - Mechanical</td><td>89</td><td>107</td><td>0</td><td>0.00%</td></tr>
+<tr><td><span class="badge PM">PM</span></td><td>Parameter Spoofing (Mechanical)</td><td>268</td><td>330</td><td>208</td><td>77.61%</td></tr>
+<tr><td><span class="badge PS">PS</span></td><td>Parameter Spoofing (Sensor)</td><td>40</td><td>79</td><td>25</td><td>62.50%</td></tr>
+<tr><td><span class="badge SS">SS</span></td><td>Shutdown Attack</td><td>261</td><td>248</td><td>241</td><td>92.34%</td></tr>
 </table></div>
+<div class="code-links">
+<h2>Released Code</h2>
+<a href="code/cyber_physical_fusion.py">Cyber-Physical Fusion Code</a>
+<a href="code/hgan_trace_detection_traceback.py">Detection and Traceback Code</a>
+<a href="code/README.md">Code README</a>
+</div>
 <div class="controls">
 <input type="text" id="search" placeholder="Search node name, IP, device...">
 <select id="classFilter"><option value="all">All Classes</option><option value="NS">NS</option><option value="NM">NM</option><option value="PM">PM</option><option value="PS">PS</option><option value="SS">SS</option></select>
@@ -164,7 +174,7 @@ fetch('traceback_report.txt').then(r=>r.text()).then(text=>{
   document.getElementById('loading').remove();
   render();
 }).catch(()=>{
-  document.getElementById('loading').textContent='Error loading data. Make sure data.txt is in the same directory.';
+  document.getElementById('loading').textContent='Error loading data. Make sure traceback_report.txt is in the same directory.';
 });
 </script>
 </body>
