@@ -1,0 +1,59 @@
+HGAN-Trace: Current Audited Code and Traceback Reports
+======================================================
+
+This repository contains the implementation used by the revised HGAN-Trace
+manuscript and two final traceback reports. It intentionally contains no
+figures, fused CSV files, raw captures, model checkpoints, or manuscript files.
+
+Current model boundary
+----------------------
+- One shared HGAN-Trace encoder for detection and root-cause localization.
+- One current fused graph per sample (K=1).
+- Typed network-endpoint and physical-process nodes.
+- Two topology-constrained local blocks and one global Transformer.
+- No Temporal Shift Module (TSM).
+- No dynamic or cross-layer edge-modulation module.
+- No model ensemble, teacher/student distillation, or causal-path recovery.
+
+Repository contents
+-------------------
+- code/: causal fusion, model, calibration, controlled baselines, audits,
+  report export, and manuscript-figure generation source code.
+- reports/igcps_traceback_report.txt: final IGCPS sample-level report.
+- reports/te_cup_sec_traceback_report.txt: final TE-CUP-SEC sample-level report.
+
+TE-CUP-SEC data sources
+-----------------------
+The datasets are not copied into this repository.
+
+Network-layer traffic data:
+https://pan.baidu.com/wap/init?surl=VT1x56k2RN9tKlXdk5nq4Q
+Extraction code: S2SL
+
+Physical-layer process data:
+https://github.com/jiw09005/TE-CUP-SEC-datasets
+
+The final fusion implementation is code/build_tecupsec_causal_fusion.py. It
+aggregates endpoint-preserving traffic features in completed one-second windows
+and aligns them with the latest already available process observation. No
+future interpolation is used.
+
+Report protocol
+---------------
+The reports are exported by code/export_traceback_reports.py from the locked
+checkpoints used by the revised manuscript. The IGCPS report applies the
+validation-locked folded 12-coefficient detection-head adjustment. The
+TE-CUP-SEC report uses the final unadjusted head and a deterministic test cap of
+4,000 samples per class (seed 44). TE-CUP-SEC Attacks 1-3 do not have exact
+affected nodes represented among the released 53 process variables, so those
+samples are explicitly excluded from exact-node localization metrics.
+
+The TXT reports contain supervised node rankings. They do not claim to recover
+ground-truth causal propagation paths.
+
+Environment
+-----------
+Install the packages listed in code/requirements.txt. Fusion also requires
+tshark to read the network captures. The full report exporter additionally
+requires the locally generated causal-fusion CSV files, final checkpoints, and
+validation lock described by its command-line arguments and source constants.
