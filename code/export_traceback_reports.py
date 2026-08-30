@@ -1,4 +1,4 @@
-"""Export current HGAN-Trace detection and root-ranking reports.
+"""Export current DA-TGT detection and root-ranking reports.
 
 The exporter loads the validation-locked checkpoints used by the revised
 manuscript.  It does not retrain, tune, or alter either model.  Reports contain
@@ -97,9 +97,9 @@ def write_report(path: Path, dataset_name: str, protocol_description: str,
 
     with path.open("w", encoding="utf-8", newline="\n") as report:
         report.write("=" * 96 + "\n")
-        report.write(f"HGAN-Trace Traceback Report: {dataset_name}\n")
+        report.write(f"DA-TGT Root-Localization Report: {dataset_name}\n")
         report.write("=" * 96 + "\n")
-        report.write("Model: single shared HGAN-Trace encoder, K=1\n")
+        report.write("Model: single shared DA-TGT encoder, K=1\n")
         report.write(f"Protocol: {protocol_description}\n")
         report.write(f"Checkpoint: {checkpoint.name}\n")
         report.write("Root output: supervised exact-node ranking, not a causal path\n")

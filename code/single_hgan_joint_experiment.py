@@ -1,4 +1,4 @@
-"""Validation-locked single-model HGAN detection and source-localization study.
+"""Validation-locked DA-TGT detection and root-localization study.
 
 The model has one shared typed graph encoder. A graph token produces class
 logits, while a node head produces source scores. There is no detector
@@ -31,8 +31,8 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "single_hgan_joint_20260824"
 DATA_PATH = ROOT / "sr_com_new.csv"
 BASELINE_PATH = ROOT / "temporal_robust_20260823" / "final_80pct_comparison.csv"
-HISTORY_LENGTH = 3
-USE_TEMPORAL = True
+HISTORY_LENGTH = 1
+USE_TEMPORAL = False
 SEED = 42
 TRAIN_CAP_PER_CLASS = 0
 VALIDATION_CAP_PER_CLASS = 0
@@ -427,8 +427,8 @@ class TypedLocalBlock(nn.Module):
         return self.norm(hidden + update)
 
 
-class SingleHGANJoint(nn.Module):
-    """One typed graph encoder with classification and source-scoring heads."""
+class DATGTJoint(nn.Module):
+    """Delay-aware typed graph Transformer with joint diagnostic heads."""
 
     def __init__(self, input_dim: int, n_nodes: int, n_net: int,
                  n_classes: int, candidate: Candidate):
@@ -774,6 +774,10 @@ class SingleHGANJoint(nn.Module):
         }
 
 
+# Preserve imports used by retained audit scripts and legacy checkpoints.
+SingleHGANJoint = DATGTJoint
+
+
 def class_weights(labels: torch.Tensor) -> torch.Tensor:
     counts = torch.bincount(labels)
     weights = torch.sqrt(counts.max().float() / counts.clamp_min(1).float())
@@ -929,7 +933,7 @@ def slice_cache(cache: dict, indices: np.ndarray) -> dict:
     return {key: value.index_select(0, tensor_indices) for key, value in cache.items()}
 
 
-def train_post_root_scorer(model: SingleHGANJoint, cache: dict,
+def train_post_root_scorer(model: DATGTJoint, cache: dict,
                            adjacency: torch.Tensor, candidate: Candidate,
                            seed: int) -> list[float]:
     if candidate.post_root_epochs <= 0:
@@ -976,7 +980,7 @@ def train_post_root_scorer(model: SingleHGANJoint, cache: dict,
     return history
 
 
-def pretrain_stable_encoder(model: SingleHGANJoint, cache: dict, builder,
+def pretrain_stable_encoder(model: DATGTJoint, cache: dict, builder,
                             adjacency: torch.Tensor, candidate: Candidate,
                             seed: int) -> list[float]:
     if candidate.pretrain_epochs <= 0:
@@ -1035,7 +1039,7 @@ def train_model(candidate: Candidate, train_cache: dict, validation_cache: dict,
                 fixed_epochs: int | None = None,
                 seed: int = SEED) -> tuple[nn.Module, list[dict], int]:
     set_seed(seed)
-    model = SingleHGANJoint(
+    model = DATGTJoint(
         input_dim=train_cache["features"].shape[-1],
         n_nodes=builder.n_nodes,
         n_net=builder.n_net,
@@ -1343,7 +1347,7 @@ def run_final() -> None:
         fixed_epochs=fixed_epochs,
     )
     result = evaluate(model, test_cache, test, builder, adjacency)
-    result["model"] = "HGAN-Trace-Joint"
+    result["model"] = "DA-TGT"
     result["split"] = "class-wise chronological first 80% refit / last 20% evaluation"
     result["selection_used_test"] = False
     result["candidate"] = asdict(candidate)
@@ -1383,7 +1387,12 @@ def main() -> None:
     parser.add_argument("--outdir", type=Path, default=OUT)
     parser.add_argument("--baseline", type=Path, default=BASELINE_PATH)
     parser.add_argument("--history-length", type=int, default=HISTORY_LENGTH)
-    parser.add_argument("--current-only", action="store_true")
+    parser.add_argument(
+        "--use-temporal-history",
+        action="store_true",
+        help="Explicitly enable historical graph inputs; the audited model uses K=1.",
+    )
+    parser.add_argument("--current-only", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--train-cap-per-class", type=int, default=0)
     parser.add_argument("--validation-cap-per-class", type=int, default=0)
     parser.add_argument("--test-cap-per-class", type=int, default=0)
@@ -1401,7 +1410,7 @@ def main() -> None:
     DATA_PATH = args.csv
     BASELINE_PATH = args.baseline
     HISTORY_LENGTH = args.history_length
-    USE_TEMPORAL = not args.current_only
+    USE_TEMPORAL = bool(args.use_temporal_history) and not args.current_only
     TRAIN_CAP_PER_CLASS = max(0, args.train_cap_per_class)
     VALIDATION_CAP_PER_CLASS = max(0, args.validation_cap_per_class)
     TEST_CAP_PER_CLASS = max(0, args.test_cap_per_class)

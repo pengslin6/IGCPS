@@ -336,7 +336,7 @@ def run_group_final(args) -> None:
     raw_probs = probabilities(model, test, builder)
     calibrated_probs = locked_conditional_probabilities(raw_probs, lock)
     result = {
-        "model": "HGAN-Trace conditionally calibrated detector",
+        "model": "DA-TGT conditionally calibrated detector",
         "selection_used_test": False,
         "uncalibrated": metrics(labels, raw_probs),
         "calibrated": metrics(labels, calibrated_probs),
@@ -378,7 +378,7 @@ def run_final(args) -> None:
     raw_probs = probabilities(model, test, builder)
     calibrated_probs = locked_probabilities(log_features(raw_probs), lock)
     result = {
-        "model": "HGAN-Trace calibrated detector",
+        "model": "DA-TGT calibrated detector",
         "selection_used_test": False,
         "uncalibrated": metrics(labels, raw_probs),
         "calibrated": metrics(labels, calibrated_probs),

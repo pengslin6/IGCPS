@@ -1,4 +1,4 @@
-"""Reproducible supplementary experiments for the HGAN-Trace revision.
+"""Reproducible supplementary experiments for the DA-TGT revision.
 
 The runner deliberately disables the Ours-only raw-feature calibrator in
 trace.py. Detection models use the same class-wise chronological split,
@@ -199,7 +199,7 @@ def build_model(name, builder, n_classes, use_dw_sep=True,
     hidden = 64
     latent = 32
     n_nodes = builder.n_nodes
-    if name == "HGAN-Trace":
+    if name == "DA-TGT":
         if hgan_variant is None:
             hgan_variant = "typed_mean" if revised_hgan else "legacy_global"
         if hgan_variant == "typed_mean":
@@ -522,7 +522,7 @@ def run_one(protocol, outdir, experiment, model_name, seed, pretrain_epochs,
              measure_aux=False, pretrain_full=False, evaluate_root=True,
              hgan_variant=None, temporal_recency_strength=0.0, force=False):
     variant = f"dw{int(use_dw_sep)}_ts{int(use_temporal_shift)}_de{int(use_dynamic_edge_weights)}"
-    if model_name == "HGAN-Trace":
+    if model_name == "DA-TGT":
         variant += (
             f"_rev{int(revised_hgan)}_ca{int(use_cross_attention)}"
             f"_ta{int(use_type_adapters)}_els{encoder_lr_scale:g}"
@@ -729,7 +729,7 @@ def summarize_group(outdir, experiment, group_cols):
 def paired_core_tests(outdir):
     frame = pd.read_csv(outdir / "results.csv")
     frame = frame[frame["experiment"] == "core"]
-    ours = frame[frame["model"] == "HGAN-Trace"].set_index("seed")
+    ours = frame[frame["model"] == "DA-TGT"].set_index("seed")
     base = frame[frame["model"] == "VGAE"].set_index("seed")
     common = sorted(set(ours.index) & set(base.index))
     output = {"n_pairs": len(common), "tests": {}}
@@ -806,7 +806,7 @@ def tsm_identity_check(protocol, outdir, n_samples=128):
     device = torch.device("cpu")
     builder = make_builder(protocol.raw, history_length=3, temporal=True)
     model = build_model(
-        "HGAN-Trace", builder, protocol.raw["n_classes"],
+        "DA-TGT", builder, protocol.raw["n_classes"],
         use_dw_sep=True, use_temporal_shift=True, use_dynamic_edge_weights=True,
     ).to(device).eval()
     adj = static_adj(builder, device)
@@ -850,11 +850,11 @@ def tsm_identity_check(protocol, outdir, n_samples=128):
 def run_phase(args, protocol, outdir):
     common = dict(protocol=protocol, outdir=outdir, force=args.force)
     if args.phase == "pilot":
-        run_one(**common, experiment="pilot", model_name="HGAN-Trace", seed=42,
+        run_one(**common, experiment="pilot", model_name="DA-TGT", seed=42,
                 pretrain_epochs=1, finetune_epochs=1, root_epochs=1, measure_aux=True)
     elif args.phase == "core":
         for seed in [11, 22, 33, 44, 55]:
-            for model in ["HGAN-Trace", "VGAE"]:
+            for model in ["DA-TGT", "VGAE"]:
                 run_one(**common, experiment="core", model_name=model, seed=seed,
                         pretrain_epochs=1, finetune_epochs=3, root_epochs=1)
         summarize_group(outdir, "core", ["model"])
@@ -862,17 +862,17 @@ def run_phase(args, protocol, outdir):
     elif args.phase == "scarcity":
         for fraction in [0.10, 0.25, 0.50, 1.00]:
             for seed in [11, 22, 33]:
-                run_one(**common, experiment="scarcity", model_name="HGAN-Trace", seed=seed,
+                run_one(**common, experiment="scarcity", model_name="DA-TGT", seed=seed,
                         pretrain_epochs=1, finetune_epochs=2, root_epochs=1,
                         train_fraction=fraction, pretrain_full=True)
         summarize_group(outdir, "scarcity", ["train_fraction"])
     elif args.phase == "convergence":
-        run_one(**common, experiment="convergence", model_name="HGAN-Trace", seed=42,
+        run_one(**common, experiment="convergence", model_name="DA-TGT", seed=42,
                 pretrain_epochs=5, finetune_epochs=8, root_epochs=3, measure_aux=True)
     elif args.phase == "sensitivity":
         tsm_identity_check(protocol, outdir)
         for history in [1, 2, 3, 5]:
-            run_one(**common, experiment="history", model_name="HGAN-Trace", seed=42,
+            run_one(**common, experiment="history", model_name="DA-TGT", seed=42,
                     pretrain_epochs=1, finetune_epochs=2, root_epochs=1,
                     history_length=history)
         variants = [
@@ -880,12 +880,12 @@ def run_phase(args, protocol, outdir):
             ("no_dynamic_edge", True, True, False),
         ]
         for label, dw, ts, de in variants:
-            run_one(**common, experiment=f"ablation_{label}", model_name="HGAN-Trace", seed=42,
+            run_one(**common, experiment=f"ablation_{label}", model_name="DA-TGT", seed=42,
                     pretrain_epochs=1, finetune_epochs=2, root_epochs=1,
                     use_dw_sep=dw, use_temporal_shift=ts, use_dynamic_edge_weights=de)
     elif args.phase == "fair":
         models = [
-            "HGAN-Trace", "GCN-AE", "GAT-AE", "VGAE", "GraphSAGE-AE",
+            "DA-TGT", "GCN-AE", "GAT-AE", "VGAE", "GraphSAGE-AE",
             "IIoT-GNN", "EE-GCN", "STGaAN", "STCI", "DT-GNN",
         ]
         for model in models:
@@ -893,7 +893,7 @@ def run_phase(args, protocol, outdir):
                     pretrain_epochs=1, finetune_epochs=3, root_epochs=3)
     elif args.phase == "locked_baselines":
         # The protocol is copied from the validation-locked HGAN configuration.
-        # HGAN-Trace itself is not rerun here because its held-out test result is
+        # DA-TGT itself is not rerun here because its held-out test result is
         # guarded by hgan_validation_search.py.
         models = [
             "GraphSAGE-AE", "GCN-AE", "VGAE", "GAT-AE", "IIoT-GNN",
@@ -908,7 +908,7 @@ def run_phase(args, protocol, outdir):
             )
     elif args.phase == "locked_paired":
         for seed in [11, 22, 33, 44, 55]:
-            for model in ["HGAN-Trace", "GAT-AE"]:
+            for model in ["DA-TGT", "GAT-AE"]:
                 run_one(
                     **common, experiment="locked_paired", model_name=model, seed=seed,
                     pretrain_epochs=1, finetune_epochs=8, root_epochs=3,
@@ -920,14 +920,14 @@ def run_phase(args, protocol, outdir):
     elif args.phase == "scaling":
         graph_scaling(outdir)
     elif args.phase == "te_audit":
-        for model in ["HGAN-Trace", "VGAE"]:
+        for model in ["DA-TGT", "VGAE"]:
             run_one(**common, experiment="te_audit", model_name=model, seed=42,
                     pretrain_epochs=1, finetune_epochs=3, root_epochs=0,
                     evaluate_root=False, encoder_lr_scale=0.5,
                     class_weight_power=0.5, apply_class_boosts=False,
                     oversample=True, label_smoothing=0.0,
                     temporal_recency_strength=1.0,
-                    hgan_variant="typed_dsgc" if model == "HGAN-Trace" else None)
+                    hgan_variant="typed_dsgc" if model == "DA-TGT" else None)
     else:
         raise ValueError(args.phase)
 

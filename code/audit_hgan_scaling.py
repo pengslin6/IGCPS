@@ -1,4 +1,4 @@
-"""Synthetic graph-size latency audit for the final HGAN-Trace architecture."""
+"""Synthetic graph-size latency audit for the final DA-TGT architecture."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ def main() -> None:
     rows = []
     for nodes in args.sizes:
         network_nodes = max(2, nodes // 2)
-        model = joint.SingleHGANJoint(
+        model = joint.DATGTJoint(
             input_dim=63,
             n_nodes=nodes,
             n_net=network_nodes,

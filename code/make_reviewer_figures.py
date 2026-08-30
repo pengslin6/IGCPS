@@ -340,7 +340,7 @@ def scaling_figure(expdir, outdir):
 
 
 def architecture_figure(outdir):
-    """Show the executed K=1 joint HGAN-Trace pipeline."""
+    """Show the executed K=1 joint DA-TGT pipeline."""
     fig, ax = plt.subplots(figsize=(7.2, 3.55))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -349,7 +349,7 @@ def architecture_figure(outdir):
     stages = [
         (0.02, 0.80, 0.18, 0.14, "a", "Causally fused input", BLUE_LIGHT, BLUE),
         (0.265, 0.80, 0.20, 0.14, "b", "Typed current graph", GREEN_LIGHT, GREEN),
-        (0.53, 0.80, 0.20, 0.14, "c", "Shared HGAN encoder", AMBER_LIGHT, AMBER),
+        (0.53, 0.80, 0.20, 0.14, "c", "Shared DA-TGT encoder", AMBER_LIGHT, AMBER),
         (0.795, 0.80, 0.185, 0.14, "d", "Joint task outputs", RED_LIGHT, RED),
     ]
     for x, y, w, h, panel, title, fc, ec in stages:
@@ -383,7 +383,7 @@ def architecture_figure(outdir):
     label(ax, 0.365, 0.495, "No interpolation, temporal-shift,\nor hand-built cross-layer edges", size=5.6, weight="bold", color=GREEN)
 
     rounded_box(ax, (0.535, 0.45), 0.19, 0.27, "white", AMBER, radius=0.015)
-    label(ax, 0.63, 0.67, "One HGAN-Trace encoder", size=7.1, weight="bold")
+    label(ax, 0.63, 0.67, "One DA-TGT encoder", size=7.1, weight="bold")
     rounded_box(ax, (0.553, 0.610), 0.154, 0.036, BLUE_LIGHT, BLUE, radius=0.008)
     label(ax, 0.63, 0.628, "63 -> 48 typed projection", size=5.45, weight="bold", color=BLUE)
     rounded_box(ax, (0.553, 0.562), 0.154, 0.036, AMBER_LIGHT, AMBER, radius=0.008)

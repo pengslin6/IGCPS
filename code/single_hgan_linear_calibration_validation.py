@@ -73,7 +73,7 @@ def collect_outputs(model, cache: dict, adjacency: torch.Tensor) -> tuple[np.nda
 def load_model(checkpoint_path: Path, builder, cache: dict):
     payload = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
     candidate = joint.Candidate(**payload["candidate"])
-    model = joint.SingleHGANJoint(
+    model = joint.DATGTJoint(
         input_dim=cache["features"].shape[-1],
         n_nodes=builder.n_nodes,
         n_net=builder.n_net,
@@ -218,7 +218,7 @@ def run_selection() -> None:
             "0--60% train / 60--80% OOF outputs",
         ],
         "held_out_80_100_used_for_selection": False,
-        "base_model": "original single shared HGAN-Trace",
+        "base_model": "single shared DA-TGT",
         "fixed_base_epochs": FIXED_EPOCHS,
         "candidate_kinds": list(CALIBRATOR_KINDS),
         "candidate_blends": list(BLENDS),
@@ -284,7 +284,7 @@ def run_final() -> None:
         for metric in metric_names
     }
     result.update({
-        "model": "HGAN-Trace-LinearCal",
+        "model": "DA-TGT-LinearCal",
         "base_checkpoint": str(BASE_OUT / "HGAN-Trace-Joint__seed42.pt"),
         "calibrator_kind": lock["selected"]["kind"],
         "calibrator_blend": blend,

@@ -529,7 +529,7 @@ def final() -> None:
             for metric in ("accuracy", "f1", "auc", "top1", "mrr", "ndcg5")
         }
         row = {
-            "model": "HGAN-Trace-Shared",
+            "model": "DA-TGT-Shared",
             "seed": seed,
             "fixed_epochs": fixed_epochs,
             "selection_used_test": False,
@@ -581,7 +581,7 @@ def final() -> None:
             )),
         }
     payload = {
-        "model": "HGAN-Trace-Shared",
+        "model": "DA-TGT-Shared",
         "single_shared_encoder": True,
         "ensemble": False,
         "candidate": asdict(candidate),

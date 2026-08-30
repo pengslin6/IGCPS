@@ -1,7 +1,7 @@
 ================================================================================================
-HGAN-Trace Traceback Report: TE-CUP-SEC
+DA-TGT Root-Localization Report: TE-CUP-SEC
 ================================================================================================
-Model: single shared HGAN-Trace encoder, K=1
+Model: single shared DA-TGT encoder, K=1
 Protocol: class-wise chronological first 80% development / last 20% test; test capped at 4,000 samples per class with seed 44
 Checkpoint: HGAN-Trace-Joint__seed42.pt
 Root output: supervised exact-node ranking, not a causal path

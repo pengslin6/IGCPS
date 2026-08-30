@@ -1,13 +1,18 @@
-HGAN-Trace: Current Audited Code and Traceback Reports
-======================================================
+DA-TGT: Current Audited Code and Root-Localization Reports
+===========================================================
 
-This repository contains the implementation used by the revised HGAN-Trace
-manuscript and two final traceback reports. It intentionally contains no
+Paper title: DA-TGT: A Delay-Aware Typed Graph Transformer for Joint Anomaly
+Detection and Root-Cause Localization in Industrial Cyber-Physical Systems
+
+DA-TGT is a Delay-Aware Typed Graph Transformer for joint anomaly detection
+and root-cause localization in industrial cyber-physical systems. This
+repository contains the implementation used by the revised DA-TGT manuscript
+and two final root-localization reports. It intentionally contains no
 figures, fused CSV files, raw captures, model checkpoints, or manuscript files.
 
 Current model boundary
 ----------------------
-- One shared HGAN-Trace encoder for detection and root-cause localization.
+- One shared DA-TGT encoder for detection and root-cause localization.
 - One current fused graph per sample (K=1).
 - Typed network-endpoint and physical-process nodes.
 - Two topology-constrained local blocks and one global Transformer.
@@ -19,6 +24,9 @@ Repository contents
 -------------------
 - code/: causal fusion, model, calibration, controlled baselines, audits,
   report export, and manuscript-figure generation source code.
+- code/single_hgan_joint_experiment.py: main DA-TGT training and evaluation
+  entry point. The current class is DATGTJoint; the legacy class alias and
+  checkpoint filenames are retained for compatibility with stored artifacts.
 - reports/igcps_traceback_report.txt: final IGCPS sample-level report.
 - reports/te_cup_sec_traceback_report.txt: final TE-CUP-SEC sample-level report.
 

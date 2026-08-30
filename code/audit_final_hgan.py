@@ -1,4 +1,4 @@
-"""Audit the final single-encoder HGAN-Trace checkpoint without retraining."""
+"""Audit the final single-encoder DA-TGT checkpoint without retraining."""
 
 from __future__ import annotations
 

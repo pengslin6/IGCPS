@@ -1800,7 +1800,7 @@ class HGT_Trace(nn.Module):
 
 
 class HGANTraceEncoder(nn.Module):
-    """Typed local-to-global encoder used by the revised HGAN-Trace model.
+    """Typed local-to-global encoder used by the revised DA-TGT model.
 
     Network endpoints and physical variables first receive type-specific
     residual projections. Local structure is encoded with self-neighbor
@@ -5675,7 +5675,7 @@ def run_ablation_and_comparison(data, graph_builder, device, epochs=30, lr=0.002
            ↓
         可解释性模块 → 特征重要性
 
-    消融实验 - HGAN-Trace 组件消融:
+    消融实验 - DA-TGT 组件消融:
     - w/o Cross-Attn : 去除双向信息物理注意力
     - w/o DW-Sep     : 深度可分离图卷积替换为标准GCN
     - w/o DEWM       : 去除动态边权重模块
@@ -5705,7 +5705,7 @@ def run_ablation_and_comparison(data, graph_builder, device, epochs=30, lr=0.002
     print(f"   分类数: {n_classes}")
     print(f"   类别: {data.get('label_names', ['Normal', 'NS', 'NM', 'PM', 'PS', 'SS'])}")
     print(f"   训练模式: 自监督预训练({pretrain_epochs}轮) + 有监督微调({finetune_epochs}轮)")
-    print(f"\n   主模型 (Ours): HGAN-Trace typed DSGC fusion")
+    print(f"\n   主模型 (Ours): DA-TGT typed graph Transformer")
     print(f"     架构: X → 类型适配 → DSGC/DEWM → 双向信息物理注意力 → Z → 分类")
     print(f"     增强: 因果溯源 + 不确定性量化 + 可解释性")
     print(f"   消融实验 (3个):")
@@ -6070,7 +6070,7 @@ def run_ablation_and_comparison(data, graph_builder, device, epochs=30, lr=0.002
     print("\n" + "=" * 120)
     print("📊 模型对比结果 (6分类任务) - 两阶段自监督训练")
     print("=" * 120)
-    print("主模型 (Ours): HGAN-Trace typed DSGC cyber-physical fusion")
+    print("主模型 (Ours): DA-TGT delay-aware typed graph Transformer")
     print("   X → 输入投影 → 深度可分离GCN → 无跨层图边/均值聚合/直接融合 → Z → 分类")
     print("消融实验 (3个): w/o DW-Sep | w/o Cross-Attn | w/o Dynamic Edge Weighting")
     print("对比模型 (9个): GCN-AE, GAT-AE, GraphSAGE-AE, VGAE, IIoT-GNN, EE-GCN, STGaAN, STCI, DT-GNN")
@@ -6227,7 +6227,7 @@ def run_ablation_and_comparison(data, graph_builder, device, epochs=30, lr=0.002
     print("-" * 80)
     ours_metrics = results.get('Ours', {})
     if ours_metrics.get('intervention_pass_rate', 0) > 0:
-        print(f"   模型: Ours (HGAN-Trace)")
+        print(f"   模型: Ours (DA-TGT)")
         print(f"   - Intervention Pass Rate: {ours_metrics['intervention_pass_rate']:.2f}%")
         print(f"     (首选候选根因节点直接通过干预验证的比例)")
         print(f"   - Average Intervention Effect: {ours_metrics['intervention_avg_effect']:.4f}")
@@ -6246,7 +6246,7 @@ def run_ablation_and_comparison(data, graph_builder, device, epochs=30, lr=0.002
 
 
 def train_main_model_only(data, graph_builder, device, epochs=2, lr=0.002, outdir='traceback_results'):
-    """Train only the current main HGAN-Trace model and save its metrics."""
+    """Train only the current DA-TGT model and save its metrics."""
     import psutil
     os.makedirs(outdir, exist_ok=True)
 

@@ -1,7 +1,7 @@
 ================================================================================================
-HGAN-Trace Traceback Report: IGCPS
+DA-TGT Root-Localization Report: IGCPS
 ================================================================================================
-Model: single shared HGAN-Trace encoder, K=1
+Model: single shared DA-TGT encoder, K=1
 Protocol: class-wise chronological first 80% development / last 20% test; validation-locked folded 12-coefficient detection-head adjustment
 Checkpoint: HGAN-Trace-Joint__seed42.pt
 Root output: supervised exact-node ranking, not a causal path

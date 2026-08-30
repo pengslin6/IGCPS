@@ -1,4 +1,4 @@
-"""Validation-locked conditional calibration for the original HGAN-Trace.
+"""Validation-locked conditional calibration for DA-TGT.
 
 The graph encoder and both task heads stay unchanged.  A 3-class linear layer
 only redistributes probability mass among Normal, NM, and PM, the confusable
@@ -43,7 +43,7 @@ def load_model(checkpoint_path: Path, raw: dict, data: dict):
     candidate = joint.Candidate(**payload["candidate"])
     builder = make_builder(raw, candidate)
     cache = joint.build_cache(data, builder)
-    model = joint.SingleHGANJoint(
+    model = joint.DATGTJoint(
         input_dim=cache["features"].shape[-1],
         n_nodes=builder.n_nodes,
         n_net=builder.n_net,
@@ -136,7 +136,7 @@ def run_validation(args) -> None:
     lock = {
         "selection_data": "class-wise early/late split within 60--80% validation",
         "test_used_for_selection": False,
-        "base_model": "original single-encoder HGAN-Trace",
+        "base_model": "single-encoder DA-TGT",
         "base_candidate": candidate.name,
         "history_length": 1,
         "temporal_history_enabled": False,
@@ -221,7 +221,7 @@ def run_final(args) -> None:
         metric: bool(float(result[metric]) > maxima[metric]) for metric in METRICS
     }
     result.update({
-        "model": "HGAN-Trace",
+        "model": "DA-TGT",
         "architecture": "original shared HGAN encoder and root head with a folded conditional detection-head layer",
         "base_candidate": candidate.name,
         "selection_used_test": False,

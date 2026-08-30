@@ -1,4 +1,4 @@
-"""Validation-only label-scarcity audit for the final K=1 HGAN-Trace."""
+"""Validation-only label-scarcity audit for the final K=1 DA-TGT."""
 
 from __future__ import annotations
 
@@ -183,7 +183,7 @@ def main() -> None:
     frame = pd.DataFrame(rows).sort_values(["fraction", "seed"])
     frame.to_csv(result_path, index=False)
     report = {
-        "model": "final K=1 single-encoder HGAN-Trace",
+        "model": "final K=1 single-encoder DA-TGT",
         "candidate": asdict(candidate),
         "evaluation": "late half of the chronological validation partition",
         "test_used": False,

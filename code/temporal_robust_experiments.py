@@ -1,4 +1,4 @@
-"""Validation-locked temporal-drift experiments for HGAN-Trace.
+"""Validation-locked temporal-drift experiments for DA-TGT.
 
 The search phases use only the original 60% training and 20% validation
 partitions. After the recency strength and epoch count are locked, the final
@@ -101,7 +101,7 @@ def build_development_test(raw: dict, dev_ratio: float = 0.8) -> tuple[dict, dic
 
 def build_hgan(builder, n_classes: int):
     return exp.build_model(
-        "HGAN-Trace", builder, n_classes,
+        "DA-TGT", builder, n_classes,
         use_cross_attention=HGAN_CONFIG["use_cross_attention"],
         use_type_adapters=HGAN_CONFIG["use_type_adapters"],
         use_dynamic_edge_weights=HGAN_CONFIG["use_dynamic_edge_weights"],
@@ -199,7 +199,7 @@ def run_hgan_candidate(protocol, outdir: Path, recency: float, stage: str,
         with contextlib.redirect_stdout(exp.Tee(sys.stdout, stream)):
             model = fit_model(
                 model, protocol.train, protocol.val, builder, device,
-                "HGAN-Trace", epochs, recency, restore_best=True,
+                "DA-TGT", epochs, recency, restore_best=True,
             )
             root_epochs = 1 if stage == "screen" else 3
             root_history = exp.train_shared_root_head(
@@ -220,7 +220,7 @@ def run_hgan_candidate(protocol, outdir: Path, recency: float, stage: str,
     row = {
         "run_id": run_id,
         "stage": stage,
-        "model": "HGAN-Trace",
+        "model": "DA-TGT",
         "recency_strength": recency,
         "best_epoch": int(model.finetune_best_epoch),
         **metrics,
@@ -381,7 +381,7 @@ def final_refit(protocol, outdir: Path, model_name: str) -> dict:
 
     lock = json.loads((outdir / "temporal_lock.json").read_text(encoding="utf-8"))
     recency = float(lock["selected_recency_strength"])
-    if model_name == "HGAN-Trace":
+    if model_name == "DA-TGT":
         epochs = int(lock["selected_epoch"])
     else:
         frame = pd.read_csv(outdir / "baseline_validation.csv")
@@ -405,7 +405,7 @@ def final_refit(protocol, outdir: Path, model_name: str) -> dict:
         temporal=BUILDER_TEMPORAL,
         preserve_network_features=True,
     )
-    if model_name == "HGAN-Trace":
+    if model_name == "DA-TGT":
         model = build_hgan(builder, protocol.raw["n_classes"]).to(device)
     else:
         model = exp.build_model(model_name, builder, protocol.raw["n_classes"]).to(device)
@@ -516,7 +516,7 @@ def main() -> None:
         for model_name in args.models:
             run_baseline_validation(protocol, args.outdir, model_name, args.force)
     elif args.phase == "final-hgan":
-        final_refit(protocol, args.outdir, "HGAN-Trace")
+        final_refit(protocol, args.outdir, "DA-TGT")
     else:
         for model_name in args.models:
             final_refit(protocol, args.outdir, model_name)

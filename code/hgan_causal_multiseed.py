@@ -1,4 +1,4 @@
-"""Five-seed audit of the locked original HGAN-Trace on causal fusion data."""
+"""Five-seed audit of the locked DA-TGT on causal fusion data."""
 
 from __future__ import annotations
 
