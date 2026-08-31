@@ -1,0 +1,95 @@
+{
+  "audit_name": "DA-TGT paired repeated-seed audit",
+  "record_date": "2026-08-31",
+  "status": "frozen for the reported paired reruns",
+  "preregistration": false,
+  "confirmatory_test_status": "retrospective; the temporal test tails had been inspected during the broader revision cycle",
+  "permitted_variation": "model initialization seed only",
+  "baseline_epoch_monitor": {
+    "IGCPS": "complete development portion",
+    "TE-CUP-SEC": "fixed 8 samples per class",
+    "role": "logging only; restore_best=false; no effect on gradient updates or final test evaluation"
+  },
+  "baseline_root_embedding_cache": "enabled for TE-CUP-SEC; encoder is frozen and deterministic during root-head training; cache changes runtime only",
+  "seeds": [11, 22, 33, 44, 55],
+  "history_length": 1,
+  "temporal_history_enabled": false,
+  "datasets": {
+    "IGCPS": {
+      "fusion_csv": "sr_com_causal_v2.csv",
+      "fusion_csv_sha256": "6C8AAEA31E4820FEE7230BA35E04CE3907EDAA5F5A56051CD5EC427D1F5998DF",
+      "main_validation_lock": "single_hgan_joint_causal_rootfix_validation_20260825/validation_lock.json",
+      "main_validation_lock_sha256": "964DA2EDB98E1F52514EAFD72AAB5FCD74EB1E4B592EB1C48A446F4AD357FF69",
+      "baseline_validation_table": "causal_fusion_v2_baselines_fullfeatures_20260825/baseline_validation.csv",
+      "baseline_validation_table_sha256": "6071CA1AAE357781C9ECC8F3ACAB83ECFD5425BDB95A38822C94C7982348FFBB",
+      "baseline_temporal_lock_sha256": "4A4EFF56F58989C29C0660A29860A708932F228D3E6F0EAA5786F0A664CDA8D0",
+      "main_epochs": 12,
+      "main_calibration": "validation-fitted folded three-class head adjustment",
+      "baseline_models": ["GraphSAGE-AE", "DT-GNN"],
+      "strongest_baseline_by_metric": {
+        "accuracy": "GraphSAGE-AE",
+        "f1": "GraphSAGE-AE",
+        "auc": "GraphSAGE-AE",
+        "top1": "DT-GNN",
+        "mrr": "DT-GNN",
+        "ndcg5": "DT-GNN"
+      }
+    },
+    "TE-CUP-SEC": {
+      "fusion_csv": "tecupsec_information_physical_causal_v3.csv",
+      "fusion_csv_sha256": "092E56FB31A684C16826202C209BB8827AF4933E9E7EDF046D9888AFB55C4C6F",
+      "main_validation_lock": "tecupsec_causal_v3_main_validation_cap1000_r2_accuracy_20260825/validation_lock.json",
+      "main_validation_lock_sha256": "DB061003F9A5FAF434741A00F19BAD03C0C2359F869DC879F13B7338F376CEC8",
+      "baseline_validation_table": "tecupsec_causal_v3_baselines_validation_cap1000_20260825/baseline_validation.csv",
+      "baseline_validation_table_sha256": "2F9293D4E034C4BDC018FE85EBD9451639AEE550207F285D671305EE754DDA6E",
+      "baseline_temporal_lock_sha256": "3E34D181EA28C50732709A4E8DDE37A3D41AE899650B20F7B81C8EBF46F975D6",
+      "main_epochs": 15,
+      "main_calibration": "none",
+      "caps_per_class": {
+        "training": 1000,
+        "validation": 500,
+        "test": 4000
+      },
+      "baseline_models": ["DT-GNN", "STCI", "GraphSAGE-AE"],
+      "strongest_baseline_by_metric": {
+        "accuracy": "DT-GNN",
+        "f1": "STCI",
+        "auc": "GraphSAGE-AE",
+        "top1": "DT-GNN",
+        "mrr": "DT-GNN",
+        "ndcg5": "DT-GNN"
+      }
+    }
+  },
+  "analysis": {
+    "primary_test": "two-sided paired t test on seed-matched differences",
+    "multiplicity": "Holm correction across six metrics within each dataset",
+    "sensitivity_test": "two-sided Wilcoxon signed-rank test",
+    "confidence_interval": "95% Student-t interval for the paired mean difference",
+    "displayed_conservative_comparator_rule": "highest observed five-seed mean among rerun baselines for each metric",
+    "displayed_conservative_comparators": {
+      "IGCPS": {
+        "accuracy": "DT-GNN",
+        "f1": "DT-GNN",
+        "auc": "DT-GNN",
+        "top1": "DT-GNN",
+        "mrr": "DT-GNN",
+        "ndcg5": "DT-GNN"
+      },
+      "TE-CUP-SEC": {
+        "accuracy": "STCI",
+        "f1": "STCI",
+        "auc": "GraphSAGE-AE",
+        "top1": "STCI",
+        "mrr": "DT-GNN",
+        "ndcg5": "DT-GNN"
+      }
+    },
+    "alpha": 0.05
+  },
+  "code_sha256": {
+    "hgan_causal_multiseed.py": "206D1A8E95FE783939592D4533D9B7ACB88D5F0F61EF08CC416888EE118655BF",
+    "paired_baseline_multiseed.py": "2765EB326A6B8D9156770E65FAF419EC52EE6E8BBDF5E6876F46EE73446A206B",
+    "paired_significance_analysis.py": "6EB0CF093BB80D85599BCBDCF59118C87686B0E514C3F8C49271559812AD0AC2"
+  }
+}

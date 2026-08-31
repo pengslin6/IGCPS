@@ -129,26 +129,32 @@ def robust_validation_epoch(history_path: Path) -> int:
 
 
 def run_seed(seed: int, protocol, development: dict, test: dict,
-             candidate, epochs: int, outdir: Path) -> dict:
+             candidate, epochs: int, outdir: Path,
+             use_calibration: bool = True) -> dict:
     builder = conditional.make_builder(protocol.raw, candidate)
     started = time.perf_counter()
-    validation_model, validation_history, validation_cache, adjacency = train_base(
-        candidate, protocol.train, protocol.val, builder, seed, epochs
-    )
-    lock = fit_lock(validation_model, validation_cache, adjacency)
-    pd.DataFrame(validation_history).to_csv(
-        outdir / f"validation_history__seed{seed}.csv", index=False
-    )
-    (outdir / f"calibration_lock__seed{seed}.json").write_text(
-        json.dumps(lock, indent=2), encoding="utf-8"
-    )
+    lock = None
+    if use_calibration:
+        validation_model, validation_history, validation_cache, adjacency = train_base(
+            candidate, protocol.train, protocol.val, builder, seed, epochs
+        )
+        lock = fit_lock(validation_model, validation_cache, adjacency)
+        pd.DataFrame(validation_history).to_csv(
+            outdir / f"validation_history__seed{seed}.csv", index=False
+        )
+        (outdir / f"calibration_lock__seed{seed}.json").write_text(
+            json.dumps(lock, indent=2), encoding="utf-8"
+        )
 
     final_model, final_history, _, adjacency = train_base(
         candidate, development, development, builder, seed, epochs
     )
     test_cache = joint.build_cache(test, builder)
     raw_probs, root_scores = conditional.collect(final_model, test_cache, adjacency)
-    probs = conditional.locked_probabilities(raw_probs, lock)
+    probs = (
+        conditional.locked_probabilities(raw_probs, lock)
+        if lock is not None else raw_probs
+    )
     labels = test_cache["labels"].numpy()
     result = calibration.metrics(labels, probs)
     root = tr.compute_strict_traceback_metrics(root_scores, test, builder)
@@ -159,8 +165,11 @@ def run_seed(seed: int, protocol, development: dict, test: dict,
         "mean_reference_rank": root["apd"],
         "seed": seed,
         "fixed_epochs": epochs,
-        "normal_nm_log_odds_margin": lock["normal_nm_log_odds_margin"],
-        "selected_C": lock["selected_C"],
+        "calibration_enabled": bool(lock is not None),
+        "normal_nm_log_odds_margin": (
+            lock["normal_nm_log_odds_margin"] if lock is not None else 0.0
+        ),
+        "selected_C": lock["selected_C"] if lock is not None else None,
         "elapsed_seconds": time.perf_counter() - started,
         "selection_used_test": False,
     })
@@ -199,16 +208,41 @@ def main() -> None:
         help="Optional validation histories used for robust per-seed epoch locking",
     )
     parser.add_argument("--seeds", type=int, nargs="+", default=[11, 22, 33, 44, 55])
+    parser.add_argument("--train-cap-per-class", type=int, default=0)
+    parser.add_argument("--validation-cap-per-class", type=int, default=0)
+    parser.add_argument("--test-cap-per-class", type=int, default=0)
+    parser.add_argument(
+        "--no-calibration", action="store_true",
+        help="Evaluate the raw DA-TGT probabilities, as in the TE-CUP-SEC protocol.",
+    )
     args = parser.parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
 
     joint.HISTORY_LENGTH = 1
     joint.USE_TEMPORAL = False
-    joint.RECENCY_STRENGTH = 1.0
-    joint.NORMAL_CLASS_WEIGHT = 1.0
-    protocol = exp.load_protocol(args.csv)
-    development, test = temporal.build_development_test(protocol.raw, dev_ratio=0.8)
     source_lock = json.loads(args.lock.read_text(encoding="utf-8"))
+    joint.RECENCY_STRENGTH = float(source_lock.get("recency_strength", 1.0))
+    joint.NORMAL_CLASS_WEIGHT = float(source_lock.get("normal_class_weight", 1.0))
+    protocol = exp.cap_protocol(
+        exp.load_protocol(args.csv),
+        max(0, args.train_cap_per_class),
+        max(0, args.validation_cap_per_class),
+        max(0, args.test_cap_per_class),
+        seed=42,
+    )
+    development, test = temporal.build_development_test(protocol.raw, dev_ratio=0.8)
+    development = tr.cap_split_per_class(
+        development,
+        max(0, args.train_cap_per_class),
+        seed=42,
+        split_name="Development",
+    )
+    test = tr.cap_split_per_class(
+        test,
+        max(0, args.test_cap_per_class),
+        seed=44,
+        split_name="Test",
+    )
     candidate = joint.Candidate(**source_lock["selected_candidate"])
     epochs = int(source_lock["selected_epoch"])
 
@@ -232,7 +266,7 @@ def main() -> None:
             )
             result = run_seed(
                 seed, protocol, development, test, candidate, seed_epochs,
-                args.outdir,
+                args.outdir, use_calibration=not args.no_calibration,
             )
         rows.append(result)
         print(
@@ -258,7 +292,11 @@ def main() -> None:
         ),
         "history_length": 1,
         "temporal_history_enabled": False,
-        "calibration_parameters": 12,
+        "calibration_parameters": 0 if args.no_calibration else 12,
+        "train_cap_per_class": max(0, args.train_cap_per_class),
+        "validation_cap_per_class": max(0, args.validation_cap_per_class),
+        "test_cap_per_class": max(0, args.test_cap_per_class),
+        "recency_strength": joint.RECENCY_STRENGTH,
         "selection_used_test": False,
         "summary": summarize(frame),
     }

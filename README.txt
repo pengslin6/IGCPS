@@ -27,6 +27,14 @@ Repository contents
 - code/single_hgan_joint_experiment.py: main DA-TGT training and evaluation
   entry point. The current class is DATGTJoint; the legacy class alias and
   checkpoint filenames are retained for compatibility with stored artifacts.
+- code/hgan_causal_multiseed.py and code/paired_baseline_multiseed.py:
+  seed-matched DA-TGT and controlled-baseline reruns used by the repeated-seed
+  audit. The legacy filename is retained for checkpoint compatibility.
+- code/paired_significance_analysis.py: paired confidence intervals,
+  two-sided paired t tests with Holm correction, and Wilcoxon sensitivity
+  checks for the six reported metrics.
+- protocol_manifest_20260831.json: frozen seeds, caps, hashes, baseline
+  mappings, comparator rule, and retrospective-test status for the audit.
 - reports/igcps_traceback_report.txt: final IGCPS sample-level report.
 - reports/te_cup_sec_traceback_report.txt: final TE-CUP-SEC sample-level report.
 
