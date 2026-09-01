@@ -6,9 +6,10 @@ Detection and Root-Cause Localization in Industrial Cyber-Physical Systems
 
 DA-TGT is a Delay-Aware Typed Graph Transformer for joint anomaly detection
 and root-cause localization in industrial cyber-physical systems. This
-repository contains the implementation used by the revised DA-TGT manuscript
-and two final root-localization reports. It intentionally contains no
-figures, fused CSV files, raw captures, model checkpoints, or manuscript files.
+repository contains the implementation used by the revised DA-TGT manuscript,
+two final root-localization reports, and a plain-text statistical audit. It
+intentionally contains no figures, fused CSV files, raw captures, model
+checkpoints, or manuscript files.
 
 Current model boundary
 ----------------------
@@ -33,10 +34,27 @@ Repository contents
 - code/paired_significance_analysis.py: paired confidence intervals,
   two-sided paired t tests with Holm correction, and Wilcoxon sensitivity
   checks for the six reported metrics.
+- code/make_convergence_figure.py: plots retained final-refit joint-training
+  loss trajectories from explicitly supplied history tables.
 - protocol_manifest_20260831.json: frozen seeds, caps, hashes, baseline
   mappings, comparator rule, and retrospective-test status for the audit.
 - reports/igcps_traceback_report.txt: final IGCPS sample-level report.
 - reports/te_cup_sec_traceback_report.txt: final TE-CUP-SEC sample-level report.
+- reports/paired_statistical_audit.txt: conservative paired five-seed results,
+  comparator mappings, and interpretation limits used in the revision.
+
+Repeated-seed audit boundary
+----------------------------
+The paired audit uses seeds 11, 22, 33, 44, and 55 and changes initialization
+only. The displayed comparison selects the highest observed five-seed baseline
+mean for each metric among the rerun adapters. On IGCPS, DA-TGT has clear
+localization gains but does not dominate DT-GNN on repeated detection metrics.
+On TE-CUP-SEC, DA-TGT has the highest repeated mean in all six metrics among
+the rerun set, but the accuracy difference is not statistically significant.
+With only five pairs, the exact two-sided Wilcoxon test cannot fall below
+0.0625. These are retrospective reproducibility estimates because the temporal
+test tails had already been inspected during the broader revision cycle; they
+are not preregistered or untouched confirmatory results.
 
 TE-CUP-SEC data sources
 -----------------------
