@@ -40,21 +40,27 @@ Repository contents
   mappings, comparator rule, and retrospective-test status for the audit.
 - reports/igcps_traceback_report.txt: final IGCPS sample-level report.
 - reports/te_cup_sec_traceback_report.txt: final TE-CUP-SEC sample-level report.
-- reports/paired_statistical_audit.txt: conservative paired five-seed results,
-  comparator mappings, and interpretation limits used in the revision.
+- reports/paired_statistical_audit.txt: complete ten-model five-seed rankings,
+  conservative paired tests, comparator mappings, and interpretation limits.
 
 Repeated-seed audit boundary
 ----------------------------
-The paired audit uses seeds 11, 22, 33, 44, and 55 and changes initialization
-only. The displayed comparison selects the highest observed five-seed baseline
-mean for each metric among the rerun adapters. On IGCPS, DA-TGT has clear
-localization gains but does not dominate DT-GNN on repeated detection metrics.
-On TE-CUP-SEC, DA-TGT has the highest repeated mean in all six metrics among
-the rerun set, but the accuracy difference is not statistically significant.
-With only five pairs, the exact two-sided Wilcoxon test cannot fall below
-0.0625. These are retrospective reproducibility estimates because the temporal
-test tails had already been inspected during the broader revision cycle; they
-are not preregistered or untouched confirmatory results.
+The audit uses seeds 11, 22, 33, 44, and 55 and changes initialization only.
+DA-TGT and all nine controlled adapters were completed on both datasets: 50
+model--seed runs per dataset and 100 in total. The displayed paired comparison
+selects the baseline with the highest observed five-seed mean for each metric.
+On IGCPS, DA-TGT ranks first on Top-1, MRR, and NDCG@5 but second, fifth, and
+second on accuracy, macro F1, and macro AUC. On TE-CUP-SEC, DA-TGT ranks first
+in all six repeated means, although its accuracy gain is not statistically
+significant. With five pairs, the exact two-sided Wilcoxon test cannot fall
+below 0.0625. These are retrospective reproducibility estimates because the
+temporal test tails had already been inspected during the broader revision
+cycle; they are not preregistered or untouched confirmatory results.
+
+All baseline encoders use the same supervised class target and the same form
+of supervised reference-node scorer in the common harness. Their localization
+columns therefore measure adapter behavior under this controlled task; they do
+not imply that every source paper originally proposed exact-node localization.
 
 TE-CUP-SEC data sources
 -----------------------

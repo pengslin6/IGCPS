@@ -1,7 +1,7 @@
 {
   "audit_name": "DA-TGT paired repeated-seed audit",
-  "record_date": "2026-08-31",
-  "status": "frozen for the reported paired reruns",
+  "record_date": "2026-09-02",
+  "status": "completed for DA-TGT and all nine baseline adapters on both datasets",
   "preregistration": false,
   "confirmatory_test_status": "retrospective; the temporal test tails had been inspected during the broader revision cycle",
   "permitted_variation": "model initialization seed only",
@@ -25,11 +25,11 @@
       "baseline_temporal_lock_sha256": "4A4EFF56F58989C29C0660A29860A708932F228D3E6F0EAA5786F0A664CDA8D0",
       "main_epochs": 12,
       "main_calibration": "validation-fitted folded three-class head adjustment",
-      "baseline_models": ["GraphSAGE-AE", "DT-GNN"],
+      "baseline_models": ["GCN-AE", "GAT-AE", "VGAE", "GraphSAGE-AE", "IIoT-GNN", "EE-GCN", "STGaAN", "STCI", "DT-GNN"],
       "strongest_baseline_by_metric": {
-        "accuracy": "GraphSAGE-AE",
-        "f1": "GraphSAGE-AE",
-        "auc": "GraphSAGE-AE",
+        "accuracy": "DT-GNN",
+        "f1": "VGAE",
+        "auc": "DT-GNN",
         "top1": "DT-GNN",
         "mrr": "DT-GNN",
         "ndcg5": "DT-GNN"
@@ -50,12 +50,12 @@
         "validation": 500,
         "test": 4000
       },
-      "baseline_models": ["DT-GNN", "STCI", "GraphSAGE-AE"],
+      "baseline_models": ["GCN-AE", "GAT-AE", "VGAE", "GraphSAGE-AE", "IIoT-GNN", "EE-GCN", "STGaAN", "STCI", "DT-GNN"],
       "strongest_baseline_by_metric": {
-        "accuracy": "DT-GNN",
+        "accuracy": "STCI",
         "f1": "STCI",
         "auc": "GraphSAGE-AE",
-        "top1": "DT-GNN",
+        "top1": "STCI",
         "mrr": "DT-GNN",
         "ndcg5": "DT-GNN"
       }
@@ -70,7 +70,7 @@
     "displayed_conservative_comparators": {
       "IGCPS": {
         "accuracy": "DT-GNN",
-        "f1": "DT-GNN",
+        "f1": "VGAE",
         "auc": "DT-GNN",
         "top1": "DT-GNN",
         "mrr": "DT-GNN",

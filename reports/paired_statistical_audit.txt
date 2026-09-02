@@ -1,35 +1,78 @@
-DA-TGT Conservative Paired Five-Seed Statistical Audit
-======================================================
+DA-TGT Complete Five-Seed All-Model and Paired Statistical Audit
+================================================================
 
-Audit date: 2026-08-31
+Audit completion date: 2026-09-02
 Seeds: 11, 22, 33, 44, 55
+Coverage: DA-TGT plus nine baseline adapters on each of two datasets
+Completed evaluations: 50 model--seed runs per dataset; 100 total
 Primary test: two-sided paired Student t test
 Multiplicity: Holm correction across six metrics within each dataset
 Interval: 95% Student-t confidence interval for the paired mean difference
-Sensitivity test: two-sided Wilcoxon signed-rank test
+Sensitivity test: exact two-sided Wilcoxon signed-rank test
+
+Comparison boundary
+-------------------
+The nine baseline adapters are GCN-AE, GAT-AE, VGAE, GraphSAGE-AE,
+IIoT-GNN, EE-GCN, STGaAN, STCI, and DT-GNN. Every adapter receives the same
+causally fused rows, chronological partitions, train-fitted scaling, graph,
+class labels, and form of supervised reference-node readout. The comparison
+therefore evaluates each encoder family inside one common task harness. It is
+not a claim that every source paper natively solves exact-node localization.
+
+Cells below are five-seed mean+/-sample standard deviation in percent.
+
+IGCPS complete ranking
+----------------------
+Model          Accuracy       Macro F1       Macro AUC      Top-1          MRR            NDCG@5
+GCN-AE         91.27+/-5.91   90.32+/-4.99   98.85+/-0.91  29.57+/-11.31  39.17+/-10.95  36.77+/-11.81
+GAT-AE         86.14+/-5.93   80.27+/-11.35  98.45+/-0.79  32.66+/-6.25   39.74+/-6.95   35.50+/-8.73
+VGAE           93.63+/-1.17   92.68+/-1.33   99.38+/-0.18  24.89+/-11.68  35.14+/-12.22  32.44+/-12.75
+GraphSAGE-AE   92.85+/-3.26   85.56+/-8.45   99.28+/-0.16  42.39+/-6.12   56.44+/-2.52   55.03+/-3.57
+IIoT-GNN       53.61+/-19.08  37.08+/-13.78  84.03+/-12.33 36.20+/-4.90   52.70+/-2.58   53.51+/-1.55
+EE-GCN         70.81+/-12.85  65.93+/-15.18  94.76+/-3.99  27.01+/-14.18  39.73+/-15.61  36.77+/-15.58
+STGaAN         77.88+/-4.89   65.70+/-16.85  98.21+/-0.86  22.50+/-9.74   38.01+/-11.48  36.31+/-11.74
+STCI           91.38+/-2.84   81.19+/-5.72   99.21+/-0.29  40.60+/-6.07   55.38+/-2.34   53.73+/-2.69
+DT-GNN         95.84+/-1.37   91.95+/-3.01   99.64+/-0.09  47.45+/-7.56   60.02+/-4.41   58.88+/-3.58
+DA-TGT         94.11+/-2.13   82.30+/-7.83   99.42+/-0.47  87.23+/-3.19   93.61+/-1.59   95.56+/-0.83
+DA-TGT rank    2               5               2              1              1              1
+
+TE-CUP-SEC complete ranking
+---------------------------
+Model          Accuracy       Macro F1       Macro AUC      Top-1          MRR            NDCG@5
+GCN-AE         73.93+/-3.11   71.33+/-2.90   94.03+/-1.32  46.89+/-5.36   58.62+/-3.01   59.70+/-2.50
+GAT-AE         66.42+/-4.38   62.84+/-5.48   92.72+/-0.68  42.06+/-8.31   56.81+/-4.51   59.41+/-4.52
+VGAE           76.19+/-2.92   73.98+/-1.92   94.93+/-0.76  44.13+/-8.10   57.91+/-4.34   59.89+/-4.59
+GraphSAGE-AE   78.19+/-2.19   76.17+/-2.23   96.19+/-0.53  54.57+/-2.15   65.57+/-2.37   68.85+/-2.50
+IIoT-GNN       22.02+/-2.98   12.92+/-2.95   50.42+/-9.10  21.64+/-11.14  38.36+/-8.87   39.71+/-11.21
+EE-GCN         73.75+/-4.24   68.89+/-4.28   93.81+/-1.38  16.37+/-9.81   29.92+/-9.48   27.57+/-7.46
+STGaAN         78.28+/-2.93   75.34+/-1.49   94.56+/-1.26  31.32+/-13.78  43.66+/-10.36  44.42+/-9.69
+STCI           81.17+/-2.57   77.51+/-1.15   95.34+/-0.74  55.69+/-4.61   66.69+/-3.94   70.22+/-3.81
+DT-GNN         77.60+/-2.77   75.01+/-2.14   95.39+/-0.87  54.61+/-3.95   66.75+/-3.57   70.43+/-3.22
+DA-TGT         82.56+/-0.64   80.77+/-0.75   97.40+/-0.12  83.09+/-1.83   89.63+/-2.10   91.82+/-2.23
+DA-TGT rank    1               1               1              1              1              1
 
 Comparator rule
 ---------------
-For each metric, the displayed comparator is the rerun baseline with the
-highest observed five-seed mean. This post-run conservative mapping is reported
-as a sensitivity analysis and is not a preregistered selection rule.
+For each metric, the paired comparator is the baseline with the highest
+observed five-seed mean in the complete table above. This post-run conservative
+mapping is reported transparently and was not preregistered.
 
-IGCPS
------
+IGCPS paired audit
+------------------
 Metric      DA-TGT mean+/-SD   Comparator mean+/-SD   Delta [95% CI]          Holm p
 Accuracy    94.11+/-2.13       DT-GNN 95.84+/-1.37   -1.72 [-2.79,-0.66]     0.0328
-Macro F1    82.30+/-7.83       DT-GNN 91.95+/-3.01   -9.65 [-20.06,0.76]     0.1234
+Macro F1    82.30+/-7.83       VGAE 92.68+/-1.33     -10.38 [-21.69,0.93]    0.1268
 Macro AUC   99.42+/-0.47       DT-GNN 99.64+/-0.09   -0.22 [-0.74,0.29]      0.2907
 Top-1       87.23+/-3.19       DT-GNN 47.45+/-7.56    39.78 [28.30,51.27]    0.0026
 MRR         93.61+/-1.59       DT-GNN 60.02+/-4.41    33.60 [27.11,40.08]    0.0007
 NDCG@5      95.56+/-0.83       DT-GNN 58.88+/-3.58    36.68 [31.81,41.55]    0.0002
 
-Interpretation: localization gains are large and Holm significant. Repeated
-detection does not dominate DT-GNN: accuracy is significantly lower, while
-Macro F1 and Macro AUC differences are not significant after correction.
+Interpretation: DA-TGT has large, Holm-significant localization gains. It does
+not dominate IGCPS detection: accuracy is significantly lower, while macro F1
+and macro AUC differences are not significant after correction.
 
-TE-CUP-SEC
-----------
+TE-CUP-SEC paired audit
+-----------------------
 Metric      DA-TGT mean+/-SD   Comparator mean+/-SD      Delta [95% CI]       Holm p
 Accuracy    82.56+/-0.64       STCI 81.17+/-2.57         1.39 [-2.28,5.06]   0.3528
 Macro F1    80.77+/-0.75       STCI 77.51+/-1.15         3.26 [1.50,5.03]    0.0204
@@ -38,19 +81,19 @@ Top-1       83.09+/-1.83       STCI 55.69+/-4.61        27.41 [20.05,34.76]  0.0
 MRR         89.63+/-2.10       DT-GNN 66.75+/-3.57      22.88 [18.73,27.04]  0.0006
 NDCG@5      91.82+/-2.23       DT-GNN 70.43+/-3.22      21.39 [17.50,25.28]  0.0006
 
-Interpretation: DA-TGT has the highest repeated mean among the rerun set for
-all six metrics. Macro F1, Macro AUC, Top-1, MRR, and NDCG@5 are Holm
-significant; accuracy is not.
+Interpretation: DA-TGT has the highest repeated mean for all six metrics.
+Macro F1, macro AUC, Top-1, MRR, and NDCG@5 are Holm significant; accuracy is
+not.
 
 Limitations
 -----------
-- Five pairs provide limited power. The exact two-sided Wilcoxon p value is
-  0.0625 even when DA-TGT is higher in all five pairs.
-- The audit reruns only the strongest comparable adapters, not every model in
-  the point-estimate tables.
+- Five pairs provide limited nonparametric power. With five same-direction
+  nonzero pairs, the exact two-sided Wilcoxon p value is 0.0625.
 - The temporal test tails had already been inspected during the broader
   revision cycle. Results are retrospective reproducibility estimates, not an
   untouched confirmatory test.
+- The common supervised root scorer evaluates adapter representations under
+  this task and is not a native reproduction of every baseline source paper.
 - The audit does not establish universal superiority across plants, protocols,
   graph schemas, or deployment hardware.
 
