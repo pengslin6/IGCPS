@@ -391,7 +391,7 @@ def evaluate_classification(model, data, builder, device):
     return metrics, pred, probs
 
 
-def evaluate_shared_root(model, head, data, builder, device):
+def evaluate_shared_root(model, head, data, builder, device, return_scores=False):
     model.eval()
     head.eval()
     adj = static_adj(builder, device)
@@ -406,9 +406,10 @@ def evaluate_shared_root(model, head, data, builder, device):
             z = model.encode(x, adj)
             all_scores.append(head(z).cpu().numpy())
     elapsed_ms = (time.perf_counter() - start) * 1000 / max(len(data["y"]), 1)
-    metrics = tr.compute_strict_traceback_metrics(np.asarray(all_scores), data, builder)
+    all_scores = np.asarray(all_scores)
+    metrics = tr.compute_strict_traceback_metrics(all_scores, data, builder)
     metrics["inference_time_ms"] = elapsed_ms
-    return metrics
+    return (metrics, all_scores) if return_scores else metrics
 
 
 def calibration_metrics(y, pred, probs, bins=15):

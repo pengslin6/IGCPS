@@ -164,6 +164,7 @@ def run_seed(seed: int, protocol, development: dict, test: dict,
         "ndcg5": root["ndcg"],
         "mean_reference_rank": root["apd"],
         "seed": seed,
+        "root_reference_policy": tr.ROOT_REFERENCE_POLICY,
         "fixed_epochs": epochs,
         "calibration_enabled": bool(lock is not None),
         "normal_nm_log_odds_margin": (
@@ -172,10 +173,13 @@ def run_seed(seed: int, protocol, development: dict, test: dict,
         "selected_C": lock["selected_C"] if lock is not None else None,
         "elapsed_seconds": time.perf_counter() - started,
         "selection_used_test": False,
+        "torch_threads": torch.get_num_threads(),
+        "artifacts_saved": True,
     })
     torch.save(
         {
             "state_dict": final_model.state_dict(),
+            "root_reference_policy": tr.ROOT_REFERENCE_POLICY,
             "candidate": asdict(candidate),
             "fixed_epochs": epochs,
             "calibration_lock": lock,
@@ -185,6 +189,8 @@ def run_seed(seed: int, protocol, development: dict, test: dict,
     pd.DataFrame(final_history).to_csv(
         outdir / f"final_history__seed{seed}.csv", index=False
     )
+    np.savez_compressed(outdir / f"predictions__seed{seed}.npz",
+                        probabilities=probs, root_scores=root_scores, labels=labels)
     (outdir / f"result__seed{seed}.json").write_text(
         json.dumps(result, indent=2), encoding="utf-8"
     )
@@ -201,7 +207,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--outdir", type=Path,
-        default=ROOT / "hgan_causal_multiseed_20260825",
+        default=ROOT / "hgan_causal_multiseed_ns_corrected_20260907",
     )
     parser.add_argument(
         "--epoch-source-dir", type=Path, default=None,
@@ -217,6 +223,9 @@ def main() -> None:
     )
     args = parser.parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
+    for saved in args.outdir.glob("result__seed*.json"):
+        if json.loads(saved.read_text(encoding="utf-8")).get("root_reference_policy") != tr.ROOT_REFERENCE_POLICY:
+            raise ValueError("Existing main-model results predate the root-reference correction; use a new output directory.")
 
     joint.HISTORY_LENGTH = 1
     joint.USE_TEMPORAL = False

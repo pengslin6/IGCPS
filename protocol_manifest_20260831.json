@@ -1,17 +1,23 @@
 {
   "audit_name": "DA-TGT paired repeated-seed audit",
-  "record_date": "2026-09-02",
-  "status": "completed for DA-TGT and all nine baseline adapters on both datasets",
+  "record_date": "2026-09-09",
+  "status": "NS-corrected IGCPS refits and retained TE five-seed runs verified",
   "preregistration": false,
   "confirmatory_test_status": "retrospective; the temporal test tails had been inspected during the broader revision cycle",
-  "permitted_variation": "model initialization seed only",
+  "permitted_variation": "seed changes initialization, minibatch order and stochastic regularization",
   "baseline_epoch_monitor": {
-    "IGCPS": "complete development portion",
-    "TE-CUP-SEC": "fixed 8 samples per class",
-    "role": "logging only; restore_best=false; no effect on gradient updates or final test evaluation"
+    "IGCPS": "8 samples per class in the corrected refit",
+    "TE-CUP-SEC": "8 samples per class",
+    "role": "logging only; restore_best=false; no model selection from this monitor"
   },
   "baseline_root_embedding_cache": "enabled for TE-CUP-SEC; encoder is frozen and deterministic during root-head training; cache changes runtime only",
-  "seeds": [11, 22, 33, 44, 55],
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
   "history_length": 1,
   "temporal_history_enabled": false,
   "datasets": {
@@ -24,8 +30,18 @@
       "baseline_validation_table_sha256": "6071CA1AAE357781C9ECC8F3ACAB83ECFD5425BDB95A38822C94C7982348FFBB",
       "baseline_temporal_lock_sha256": "4A4EFF56F58989C29C0660A29860A708932F228D3E6F0EAA5786F0A664CDA8D0",
       "main_epochs": 12,
-      "main_calibration": "validation-fitted folded three-class head adjustment",
-      "baseline_models": ["GCN-AE", "GAT-AE", "VGAE", "GraphSAGE-AE", "IIoT-GNN", "EE-GCN", "STGaAN", "STCI", "DT-GNN"],
+      "main_calibration": "post-forward conditional probability adjustment, not folded",
+      "baseline_models": [
+        "GCN-AE",
+        "GAT-AE",
+        "VGAE",
+        "GraphSAGE-AE",
+        "IIoT-GNN",
+        "EE-GCN",
+        "STGaAN",
+        "STCI",
+        "DT-GNN"
+      ],
       "strongest_baseline_by_metric": {
         "accuracy": "DT-GNN",
         "f1": "VGAE",
@@ -33,6 +49,23 @@
         "top1": "DT-GNN",
         "mrr": "DT-GNN",
         "ndcg5": "DT-GNN"
+      },
+      "main_result_directory": "hgan_causal_multiseed_ns_corrected_20260907",
+      "baseline_result_directory": "paired_igcps_baselines_ns_corrected_20260907",
+      "current_mean_ranks": {
+        "accuracy": 3,
+        "f1": 7,
+        "auc": 4,
+        "top1": 1,
+        "mrr": 1,
+        "ndcg5": 1
+      },
+      "current_checkpoint_sha256": {
+        "11": "32091245bc1d2b299b0c8211714d711fa4bc56a38da8300872d8d28bb000b090",
+        "22": "ac0408637a5a9749659df7ac474f8a66bef7a9de02b5f5e0c1ebc57aee32f66e",
+        "33": "e13863051d704a9d0ef9a9fbf4e34eb0ae5e655284969a4a2c3f65516fb9823c",
+        "44": "37d4e8be02f8f634c9c909382bd90579d2a132c6ee7c66a5cd152e5c91d261fc",
+        "55": "99255208a04c1b089eb79707fa6a2385e437ddebd7bd393de85a748b6cec7188"
       }
     },
     "TE-CUP-SEC": {
@@ -50,7 +83,17 @@
         "validation": 500,
         "test": 4000
       },
-      "baseline_models": ["GCN-AE", "GAT-AE", "VGAE", "GraphSAGE-AE", "IIoT-GNN", "EE-GCN", "STGaAN", "STCI", "DT-GNN"],
+      "baseline_models": [
+        "GCN-AE",
+        "GAT-AE",
+        "VGAE",
+        "GraphSAGE-AE",
+        "IIoT-GNN",
+        "EE-GCN",
+        "STGaAN",
+        "STCI",
+        "DT-GNN"
+      ],
       "strongest_baseline_by_metric": {
         "accuracy": "STCI",
         "f1": "STCI",
@@ -58,6 +101,23 @@
         "top1": "STCI",
         "mrr": "DT-GNN",
         "ndcg5": "DT-GNN"
+      },
+      "main_result_directory": "paired_te_main_20260831",
+      "baseline_result_directory": "paired_te_baselines_20260831",
+      "current_mean_ranks": {
+        "accuracy": 1,
+        "f1": 1,
+        "auc": 1,
+        "top1": 1,
+        "mrr": 1,
+        "ndcg5": 1
+      },
+      "current_checkpoint_sha256": {
+        "11": "165e023d0100dae952b0e11761fb25e87ca9b983801ecd023b05ff8321cdde9c",
+        "22": "57346196440aee7622164362cb96cb719d65f3add9ad5db582567684d8da9d86",
+        "33": "990ec85c60f3773d1ac2396b9950f91dd62f4dac9f3749b34f1896f77cee3cd3",
+        "44": "e63a7666b1641463afd3c645f3fb0540f94d53cda9ea86ddf72616bd419466c0",
+        "55": "b4ca649ff5c699b36606b075e84a5cd9bb21180d499bec2a59df40f5944bb602"
       }
     }
   },
@@ -88,9 +148,42 @@
     "alpha": 0.05
   },
   "code_sha256": {
-    "hgan_causal_multiseed.py": "206D1A8E95FE783939592D4533D9B7ACB88D5F0F61EF08CC416888EE118655BF",
-    "paired_baseline_multiseed.py": "2765EB326A6B8D9156770E65FAF419EC52EE6E8BBDF5E6876F46EE73446A206B",
-    "paired_significance_analysis.py": "6EB0CF093BB80D85599BCBDCF59118C87686B0E514C3F8C49271559812AD0AC2",
-    "make_convergence_figure.py": "E3A83316049FAB753A8A4C227CFDBB5D34770C4CD0E3062BD2B9B12D44DC46AC"
-  }
+    "audit_final_hgan.py": "fc1da46ef99dd46daf8dd35f74f1318ecd916312ec89a935d6652d1a59555016",
+    "audit_hgan_scaling.py": "53c83c1a7c13d700ffb3dd92293cc832f4dfc54bb1a4c09e0224c6da04eb17e3",
+    "build_igcps_causal_fusion.py": "3e2714efa20e8066368061d30b6e220bbeccf42be6754b877dd0ef2797086acb",
+    "build_tecupsec_causal_fusion.py": "b0782eb1fade27168f65b20e1ed8541c3d351dd96247b270753c2c801c1f4de2",
+    "export_traceback_reports.py": "2ed199441573999478fe10e046a6e72a477650c7f43f6b3ac7173f278abc3bfc",
+    "extract_final_root_examples.py": "329801074a4e8f49223ab905004e2b6ed27267b65772022bb2cadc16808a3974",
+    "graphsage_bias_calibration.py": "86b2d1e7189d495b18df60a08660a6c4545dc097d15f015b73a5edf4a47eac7f",
+    "hgan_causal_multiseed.py": "08371c898332c955b6d80f88f9cd7b6af3d4db90fcb38affcf5b682716b7dd0b",
+    "hgan_conditional_calibration.py": "152a793d254be345017595adb27be07bd74baacf79a91c007faec0619a0c1157",
+    "hgan_current_scarcity_audit.py": "a436621cbb982c1a72b33a2959ea51d3547b30f4d6f37871b52a158ba6c574b2",
+    "make_convergence_figure.py": "e3a83316049fab753a8a4c227cfdbb5d34770c4cd0e3062bd2b9b12d44dc46ac",
+    "make_reviewer_figures.py": "752d65f137afa8eee7211d9d5061a8cf49e2514cbb56c5bca598e4de1034fa45",
+    "make_root_evidence_figure.py": "4594dfa9304cc43f9670b2bdb8d29d8f0d330734d5929db9dd80e892dc5657d8",
+    "paired_baseline_multiseed.py": "ea446252136334825b43bf1dbae9cab70e25002b1bb484d01674beb7db19453b",
+    "paired_significance_analysis.py": "6eb0cf093bb80d85599bcbdcf59118c87686b0e514c3f8c49271559812ad0ac2",
+    "protocols/IGCPS.json": "8ec23697118dda6d7e7e63d272501887893bb9fcdfec91b205b6494770eb13cb",
+    "protocols/TE-CUP-SEC.json": "5ef6ca5add4a73d4f2ba7388868d0c92123750c951ae47ee34326d58268611d7",
+    "requirements.txt": "511a99b61aba8992c5f6bf690ae801d46c09e86f67c2fe6b06c4e7c480202d09",
+    "reviewer_experiments.py": "59a584fecedde26871cc0265b82ceb9ef8329e96d65abeb4bde7a1b12a5f501b",
+    "run_locked_protocol.py": "d361f37eb44043d6520c4d87561de8c7b5fdaf98a4b34e121ab4613e3d239f20",
+    "single_hgan_joint_experiment.py": "036bc5e9af2bd1af20e8e0b975f2094ebe0bd415375df2050171dbe9b549bcc5",
+    "single_hgan_linear_calibration_validation.py": "79985da2bce2dda1fcb1ca18cd0288ad5eed19d83eaf9cbd66a7d8008429e238",
+    "single_hgan_shared_gat_experiment.py": "650fb1ca1a5a17861cdcab1dbee8efab67f750b533eab2482b9dcf118206c4b3",
+    "temporal_robust_experiments.py": "8824ec94179c747775df24419d64caf8cd3c12fa9858cc749093f2abea407117",
+    "test_export_traceback_reports.py": "4e95e4ee88dc139907bfb0c18408ba376d7df7d615783c4f70ddcc77404a29da",
+    "trace.py": "f5b8b9f69b4e238a697b9f6bd4342678119b0db210a77c0d07a234c8add18527",
+    "validate_locked_baselines.py": "b633eb8129fcd5ecbb57126ee8f027de6c96b4fa041c722d25f9db221649348a"
+  },
+  "root_reference_policy": "igcps-ns-two-pressure-switches-v2-20260907",
+  "representative_report_seed": 11,
+  "comparison_limit": "DA-TGT jointly trains its encoder and graph-context node head; baseline heads train for three epochs on frozen embeddings. TE recency is 2 versus 1; IGCPS detector adjustment is DA-TGT-specific. This is not optimization-matched.",
+  "reference_limit": "Scenario-derived node references; no independent initiating-node or propagation-path annotations. Class-probability lookup performs better than the learned root head.",
+  "report_sha256": {
+    "igcps_traceback_report.txt": "4a712d79b32a9751824badce3225fda3922f69df35a82a5ceda3bba854be32ea",
+    "paired_statistical_audit.txt": "3e4812bda16fb1c8281a5182a6b3f865ecece305108b53e09ecf033e81ea36de",
+    "te_cup_sec_traceback_report.txt": "a4e15113049d197c3a3002838573274bd790283aa2f037a2650a6fa697dfd927"
+  },
+  "text_hash_policy": "code_sha256 and report_sha256 hash UTF-8 text after CRLF/CR normalization to LF; binary checkpoint and fused-input hashes remain raw bytes"
 }

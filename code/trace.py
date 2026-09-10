@@ -666,6 +666,13 @@ def _phy_indices_by_columns(graph_builder, column_names):
     return matches
 
 
+ROOT_REFERENCE_POLICY = 'igcps-ns-two-pressure-switches-v2-20260907'
+IGCPS_NS_ROOT_COLUMNS = (
+    'phy_Switch status of high pressure switch',
+    'phy_Switch status of sub-high pressure switch',
+)
+
+
 def infer_true_root_nodes(sample_idx, data, graph_builder):
     """Infer concrete root-cause node labels for strict traceback evaluation.
 
@@ -706,11 +713,16 @@ def infer_true_root_nodes(sample_idx, data, graph_builder):
         separator_plc = graph_builder.ip_to_idx.get('192.168.6.2')
         return {separator_plc} if separator_plc is not None else set()
 
-    if label_upper in {'NS'}:
-        nodes = _phy_indices_by_keywords(graph_builder, [
-            ['high', 'switch'], ['sub', 'switch'], ['switch', 'status']
-        ])
-        return nodes or ({graph_builder.n_net} if graph_builder.n_phy else set())
+    if label_upper == 'NS':
+        # Author-confirmed scenario: only these two pressure switches are affected.
+        # A broad switch/status match also includes the unrelated heater switch.
+        nodes = _phy_indices_by_columns(graph_builder, IGCPS_NS_ROOT_COLUMNS)
+        if len(nodes) != len(IGCPS_NS_ROOT_COLUMNS):
+            raise ValueError(
+                'NS root references require both high- and sub-high-pressure '
+                'switch columns; no substitute node is a valid reference.'
+            )
+        return nodes
 
     if label_upper in {'NM'}:
         nodes = _phy_indices_by_keywords(graph_builder, [
@@ -6617,18 +6629,23 @@ def plot_anomaly_traceback(results, graph_builder, data=None, save_path='traceba
 
 
 def plot_causal_propagation_per_class(results, graph_builder, data=None, save_dir='traceback_results'):
-    """为每个异常类别单独绘制因果传播拓扑图（共5张）
+    """Legacy class-level score-order visualization, not propagation recovery.
+
+    The historical function/output names are retained for compatibility.
+    Red edges connect class-averaged score ranks. They do not use path labels
+    or the pairwise propagation predictor and must not be treated as truth.
 
     节点命名: N1, N2, ... (网络节点), P1, P2, ... (物理节点)
     有关节点: 所有在通信图中出现过的网络节点 + 全部物理节点
     边类型:
       绿色  - 网络通信边（所有实际通信对）
       蓝色  - 物理层链式连接
-      红色  - 异常传播路径（异常节点间按分数顺序连接）
+      红色  - 分数排序连线，不代表真实传播路径
     运行时打印节点名称映射和各类别异常分数
     """
     import matplotlib.patches as mpatches
     from matplotlib.lines import Line2D
+    print('Legacy rank visualization: red links show score order, not observed or validated propagation.')
 
     label_names = data.get('label_names', ['Normal', 'NS', 'NM', 'PM', 'PS', 'SS']) if data else ['Normal', 'NS', 'NM', 'PM', 'PS', 'SS']
 
@@ -6841,8 +6858,8 @@ def plot_causal_propagation_per_class(results, graph_builder, data=None, save_di
             mpatches.Patch(facecolor='#e74c3c', edgecolor='#c0392b', label='Anomalous Node'),
             Line2D([0], [0], color='#27ae60', linewidth=2, label='Network Communication'),
             Line2D([0], [0], color='#2980b9', linewidth=3, label='Physical Connection'),
-            Line2D([0], [0], color='#e74c3c', linewidth=3, label='Anomaly Propagation'),
-            Line2D([0], [0], color='#95a5a6', linewidth=1.5, linestyle='--', label='Cross-domain Connection'),
+            Line2D([0], [0], color='#e74c3c', linewidth=3, label='Score-order Connection'),
+            Line2D([0], [0], color='#95a5a6', linewidth=1.5, linestyle='--', label='Co-selected Cross-domain Nodes'),
         ]
         ax.legend(handles=legend_elements, loc='best', fontsize=16, framealpha=0.95)
 

@@ -132,7 +132,10 @@ def run_seed(
     safe_name = model_name.replace("/", "_")
     result_path = outdir / f"result__{safe_name}__seed{seed}.json"
     if result_path.exists():
-        return json.loads(result_path.read_text(encoding="utf-8"))
+        result = json.loads(result_path.read_text(encoding="utf-8"))
+        if result.get("root_reference_policy") != tr.ROOT_REFERENCE_POLICY:
+            raise ValueError("Saved baseline uses a different or unversioned root-reference policy; use a new output directory.")
+        return result
 
     tr.set_seed(seed)
     device = torch.device("cpu")
@@ -172,12 +175,15 @@ def run_seed(
                 lr=0.002,
             )
 
-    classification, _, _ = exp.evaluate_classification(
+    classification, _, probabilities = exp.evaluate_classification(
         model, test, builder, device
     )
-    root = exp.evaluate_shared_root(model, head, test, builder, device)
+    root, root_scores = exp.evaluate_shared_root(
+        model, head, test, builder, device, return_scores=True
+    )
     result = {
         "model": model_name,
+        "root_reference_policy": tr.ROOT_REFERENCE_POLICY,
         "seed": int(seed),
         "fixed_epochs": int(epochs),
         "root_epochs": 3,
@@ -195,7 +201,16 @@ def run_seed(
         "epoch_monitor_samples": int(len(epoch_monitor["y"])),
         "root_embedding_cache_enabled": True,
         "root_final_loss": float(root_history[-1]),
+        "artifacts_saved": True,
+        "torch_threads": torch.get_num_threads(),
     }
+    torch.save({"state_dict": model.state_dict(), "root_state_dict": head.state_dict(),
+                "model": model_name, "seed": seed, "fixed_epochs": epochs,
+                "root_reference_policy": tr.ROOT_REFERENCE_POLICY},
+               outdir / f"checkpoint__{safe_name}__seed{seed}.pt")
+    np.savez_compressed(outdir / f"predictions__{safe_name}__seed{seed}.npz",
+                        probabilities=probabilities, root_scores=root_scores,
+                        labels=np.asarray(test["y"]))
     history = pd.DataFrame(getattr(model, "finetune_history", []))
     if not history.empty:
         history.to_csv(
@@ -217,6 +232,9 @@ def main() -> None:
     parser.add_argument("--test-cap-per-class", type=int, default=0)
     args = parser.parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
+    for saved in args.outdir.glob("result__*.json"):
+        if json.loads(saved.read_text(encoding="utf-8")).get("root_reference_policy") != tr.ROOT_REFERENCE_POLICY:
+            raise ValueError("Existing baseline results predate the root-reference correction; use a new output directory.")
 
     lock = json.loads(
         (args.protocol_dir / "temporal_lock.json").read_text(encoding="utf-8")

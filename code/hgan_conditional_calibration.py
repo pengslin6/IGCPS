@@ -2,8 +2,9 @@
 
 The graph encoder and both task heads stay unchanged.  A 3-class linear layer
 only redistributes probability mass among Normal, NM, and PM, the confusable
-classes identified on the chronological validation split.  The layer can be
-folded into the detection head and does not add another encoder or model.
+classes identified on the chronological validation split. The implementation
+applies this adjustment after the neural forward pass; it is not folded into
+the classifier weights and does not add another encoder.
 """
 
 from __future__ import annotations
@@ -222,7 +223,7 @@ def run_final(args) -> None:
     }
     result.update({
         "model": "DA-TGT",
-        "architecture": "original shared HGAN encoder and root head with a folded conditional detection-head layer",
+        "architecture": "shared DA-TGT encoder and root head with a separate post-forward conditional probability adjustment",
         "base_candidate": candidate.name,
         "selection_used_test": False,
         "single_model": True,

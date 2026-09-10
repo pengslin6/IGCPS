@@ -1,0 +1,84 @@
+{
+  "dataset": "IGCPS",
+  "fusion_csv": "sr_com_causal_v2.csv",
+  "fusion_csv_sha256": "6C8AAEA31E4820FEE7230BA35E04CE3907EDAA5F5A56051CD5EC427D1F5998DF",
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "root_reference_policy": "igcps-ns-two-pressure-switches-v2-20260907",
+  "retrospective_evidence": true,
+  "main_lock": {
+    "selected_candidate": {
+      "name": "typed_full_robust",
+      "preserve_network_features": true,
+      "model_dim": 48,
+      "n_heads": 4,
+      "transformer_layers": 2,
+      "dropout": 0.25,
+      "input_noise": 0.02,
+      "root_weight": 0.3,
+      "normal_root_weight": 0.03,
+      "learning_rate": 0.0007,
+      "weight_decay": 0.0005,
+      "epochs": 18,
+      "auc_margin_weight": 0.0,
+      "auc_margin": 0.5,
+      "ovr_bce_weight": 0.0
+    },
+    "selected_epoch": 12
+  },
+  "baseline_lock": {
+    "selected_recency_strength": 1.0
+  },
+  "baseline_epochs": [
+    {
+      "model": "GCN-AE",
+      "best_epoch": 8
+    },
+    {
+      "model": "GAT-AE",
+      "best_epoch": 8
+    },
+    {
+      "model": "VGAE",
+      "best_epoch": 6
+    },
+    {
+      "model": "GraphSAGE-AE",
+      "best_epoch": 6
+    },
+    {
+      "model": "IIoT-GNN",
+      "best_epoch": 7
+    },
+    {
+      "model": "EE-GCN",
+      "best_epoch": 8
+    },
+    {
+      "model": "STGaAN",
+      "best_epoch": 4
+    },
+    {
+      "model": "STCI",
+      "best_epoch": 8
+    },
+    {
+      "model": "DT-GNN",
+      "best_epoch": 8
+    }
+  ],
+  "caps_per_class": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "main_output": "hgan_causal_multiseed_ns_corrected_20260907",
+  "baseline_output": "paired_igcps_baselines_ns_corrected_20260907",
+  "source_main_lock_sha256": "964da2edb98e1f52514eafd72aab5fcd74eb1e4b592eb1c48a446f4ad357ff69",
+  "source_baseline_validation_sha256": "6071ca1aae357781c9ecc8f3acab83ecfd5425bdb95a38822c94c7982348ffbb"
+}

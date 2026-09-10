@@ -369,8 +369,8 @@ def architecture_figure(outdir):
                 transform=ax.transAxes, zorder=3)
     label(ax, 0.04, 0.555, "Physical layer", size=7.1, weight="bold", ha="left")
     label(ax, 0.04, 0.523, "sensor and actuator variables", size=5.8, color=MUTED, ha="left")
-    label(ax, 0.11, 0.485, "1 s right-edge network windows", size=5.8, weight="bold", color=BLUE)
-    label(ax, 0.11, 0.461, "backward/as-of process alignment", size=5.3, color=MUTED)
+    label(ax, 0.11, 0.485, "0.2 s IGCPS / 1 s TE windows", size=5.8, weight="bold", color=BLUE)
+    label(ax, 0.11, 0.461, "past-only as-of process alignment", size=5.3, color=MUTED)
 
     rounded_box(ax, (0.27, 0.45), 0.19, 0.27, "white", GREEN, radius=0.015)
     label(ax, 0.365, 0.69, "Current row only (K = 1)", size=7.1, weight="bold")
@@ -379,13 +379,13 @@ def architecture_figure(outdir):
     rounded_box(ax, (0.375, 0.618), 0.065, 0.043, GREEN_LIGHT, GREEN, radius=0.007)
     label(ax, 0.4075, 0.6395, "process", size=5.6, weight="bold", color=GREEN)
     label(ax, 0.365, 0.579, "type and position identifiers", size=5.8, color=MUTED)
-    label(ax, 0.365, 0.542, "communication + process-chain edges", size=5.5, color=MUTED)
+    label(ax, 0.365, 0.542, "fixed endpoints / process-chain edges", size=5.5, color=MUTED)
     label(ax, 0.365, 0.495, "No interpolation, temporal-shift,\nor hand-built cross-layer edges", size=5.6, weight="bold", color=GREEN)
 
     rounded_box(ax, (0.535, 0.45), 0.19, 0.27, "white", AMBER, radius=0.015)
     label(ax, 0.63, 0.67, "One DA-TGT encoder", size=7.1, weight="bold")
     rounded_box(ax, (0.553, 0.610), 0.154, 0.036, BLUE_LIGHT, BLUE, radius=0.008)
-    label(ax, 0.63, 0.628, "63 -> 48 typed projection", size=5.45, weight="bold", color=BLUE)
+    label(ax, 0.63, 0.628, "input -> d = 48 projection", size=5.45, weight="bold", color=BLUE)
     rounded_box(ax, (0.553, 0.562), 0.154, 0.036, AMBER_LIGHT, AMBER, radius=0.008)
     label(ax, 0.63, 0.580, "type-specific residual adapters", size=5.15, weight="bold", color=AMBER)
     rounded_box(ax, (0.553, 0.514), 0.154, 0.036, AMBER_LIGHT, AMBER, radius=0.008)
@@ -399,14 +399,14 @@ def architecture_figure(outdir):
     rounded_box(ax, (0.813, 0.548), 0.149, 0.055, RED_LIGHT, RED, radius=0.008)
     label(ax, 0.8875, 0.5755, "node + graph root scorer", size=5.55, weight="bold")
     rounded_box(ax, (0.813, 0.471), 0.149, 0.055, "white", RED, radius=0.008)
-    label(ax, 0.8875, 0.4985, "12-parameter conditional head", size=5.15, weight="bold", color=RED)
+    label(ax, 0.8875, 0.4985, "IGCPS: 12-coeff. adjustment", size=5.15, weight="bold", color=RED)
 
     rounded_box(ax, (0.11, 0.18), 0.78, 0.16, GRAY_LIGHT, MUTED, radius=0.015)
     label(ax, 0.13, 0.309, "Joint supervised optimization", size=7.1, weight="bold", ha="left")
     protocol = [
         (0.14, "weighted cross-entropy\nanomaly classes", BLUE),
         (0.405, "0.30 x weighted BCE\nreference nodes", GREEN),
-        (0.68, "AdamW; 12 / 15 epochs\nvalidation locked", RED),
+        (0.68, "AdamW; IGCPS/TE: 12/15 epochs\nvalidation locked", RED),
     ]
     for x, text, color in protocol:
         rounded_box(ax, (x, 0.215), 0.18, 0.065, "white", color, radius=0.007)

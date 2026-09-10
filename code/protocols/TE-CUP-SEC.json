@@ -1,0 +1,86 @@
+{
+  "dataset": "TE-CUP-SEC",
+  "fusion_csv": "tecupsec_information_physical_causal_v3.csv",
+  "fusion_csv_sha256": "092E56FB31A684C16826202C209BB8827AF4933E9E7EDF046D9888AFB55C4C6F",
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "root_reference_policy": "igcps-ns-two-pressure-switches-v2-20260907",
+  "retrospective_evidence": true,
+  "main_lock": {
+    "selected_candidate": {
+      "name": "typed_full_robust",
+      "preserve_network_features": true,
+      "model_dim": 48,
+      "n_heads": 4,
+      "transformer_layers": 2,
+      "dropout": 0.25,
+      "input_noise": 0.02,
+      "root_weight": 0.3,
+      "normal_root_weight": 0.03,
+      "learning_rate": 0.0007,
+      "weight_decay": 0.0005,
+      "epochs": 18,
+      "auc_margin_weight": 0.0,
+      "auc_margin": 0.5,
+      "ovr_bce_weight": 0.0
+    },
+    "selected_epoch": 15,
+    "recency_strength": 2.0,
+    "normal_class_weight": 1.0
+  },
+  "baseline_lock": {
+    "selected_recency_strength": 1.0
+  },
+  "baseline_epochs": [
+    {
+      "model": "GCN-AE",
+      "best_epoch": 8
+    },
+    {
+      "model": "GAT-AE",
+      "best_epoch": 8
+    },
+    {
+      "model": "VGAE",
+      "best_epoch": 7
+    },
+    {
+      "model": "GraphSAGE-AE",
+      "best_epoch": 7
+    },
+    {
+      "model": "IIoT-GNN",
+      "best_epoch": 1
+    },
+    {
+      "model": "EE-GCN",
+      "best_epoch": 5
+    },
+    {
+      "model": "STGaAN",
+      "best_epoch": 8
+    },
+    {
+      "model": "STCI",
+      "best_epoch": 8
+    },
+    {
+      "model": "DT-GNN",
+      "best_epoch": 4
+    }
+  ],
+  "caps_per_class": {
+    "train": 1000,
+    "validation": 500,
+    "test": 4000
+  },
+  "main_output": "paired_te_main_20260831",
+  "baseline_output": "paired_te_baselines_20260831",
+  "source_main_lock_sha256": "db061003f9a5faf434741a00f19bad03c0c2359f869dc879f13b7338f376cec8",
+  "source_baseline_validation_sha256": "2f9293d4e034c4bdc018fe85ebd9451639aee550207f285d671305ee754dda6e"
+}
