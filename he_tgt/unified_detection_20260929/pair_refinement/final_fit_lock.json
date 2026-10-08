@@ -1,0 +1,29 @@
+{
+  "hashes": {
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_model.py": "68a175642ae2d1de23cebf249006389d332323c155e99a0018060e89c139d108",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\unified.py": "133ce4bf2f1557703775a7e2e43365bc19c6e66fa5149b09d55ccfb95745b197",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\PAIR_PROTOCOL.md": "3b633809f68e45b6bd5bff0a366beafa63b3f35e3d6689b16c45b33f4c44234f",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_refinement\\manifest.json": "fb9a51d1acf9c6434feeca279e565f3e619f76bf090bfcceab52f03ee1350ff5",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_refinement\\selection_lock.json": "0b3e618b1d0598a7b9066f165e593525f804db1c4624836cb111b52e300f3d44",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_refinement\\development_verification.json": "b6fc274c689288c7affdf2f50c945da59fb604d2014e5ddd042a07f2c07fb8fb",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_refinement\\IGCPS\\final_pairs.joblib": "d528c52e5ae7ebf758ac4a0aef202e046c70142f468f0f2bcc96e27a61e23cf2",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_refinement\\IGCPS\\final_prior.joblib": "01c881a6cc81bf8c047ca4996e0da009d7df6d3e87e4028875ef04738b404107",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\IGCPS\\train.npz": "fd77a782e89ed55ae02daae12b4770810daa2f9bc51748f16886ff066b24ec27",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\IGCPS\\preprocessing.joblib": "c060ed24a2c53605920d3e0360853d834f8a4cc4f4ae43494f5d7aed4eae3e50",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_refinement\\TE-CUP-SEC\\final_pairs.joblib": "9fc7d8057563d7380d6a5bbeae2a1503ec9b47a5e2d5359e7c15c2a3373f45da",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\unified_detection_20260929\\pair_refinement\\TE-CUP-SEC\\final_prior.joblib": "d846c2f2d0437f7e07d94e07789a328680725d4640e19477aefc01b9b19c3fa2",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\train.npz": "0923ce60a8167ac812d0e1b7a6808d5ac0508b47f4a613d13c5ed5cd74d55c4b",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\preprocessing.joblib": "01f8e31ef33367e73323ebf5e02899b588b012fcb80a49a628dee984968bce89"
+  },
+  "policy": {
+    "beta": 1.0,
+    "gamma": 0.25,
+    "rho": 0.5
+  },
+  "setting": {
+    "name": "network_with_physical_changes__min60",
+    "view": "network_with_physical_changes",
+    "minimum": 60
+  },
+  "new_test_inputs_used": false
+}

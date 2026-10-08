@@ -1,0 +1,10 @@
+{
+  "selection_lock_sha256": "8b4076ad8ff2c9963f21776412a9ebdb1c64015e8e89e53cd96a8d5f692f10e6",
+  "fitted_model_hashes": {
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\information_matched_full_20260930\\IGCPS\\equal_budget_pairs__DA-TGT.joblib": "d528c52e5ae7ebf758ac4a0aef202e046c70142f468f0f2bcc96e27a61e23cf2",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\information_matched_full_20260930\\TE-CUP-SEC\\equal_budget_pairs__DA-TGT.joblib": "9fc7d8057563d7380d6a5bbeae2a1503ec9b47a5e2d5359e7c15c2a3373f45da",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\information_matched_full_20260930\\IGCPS\\equal_budget_pairs__DT-GNN.joblib": "d528c52e5ae7ebf758ac4a0aef202e046c70142f468f0f2bcc96e27a61e23cf2",
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\information_matched_full_20260930\\TE-CUP-SEC\\equal_budget_pairs__DT-GNN.joblib": "9fc7d8057563d7380d6a5bbeae2a1503ec9b47a5e2d5359e7c15c2a3373f45da"
+  },
+  "test_used_for_fitting": false
+}

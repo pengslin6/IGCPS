@@ -1,0 +1,39 @@
+{
+  "all_passed": true,
+  "prediction_files_checked": 24,
+  "details": {
+    "IGCPS": {
+      "validation_rows": 948,
+      "eligible_rows": 366,
+      "lookup_table_fit_rows": 2842
+    },
+    "TE-CUP-SEC": {
+      "validation_rows": 4500,
+      "eligible_rows": 2500,
+      "lookup_table_fit_rows": 9000
+    }
+  },
+  "test_accessed": false,
+  "original_model_and_metric_files_unchanged": {
+    "he_tgt_revision_20260929\\metrics.json": true,
+    "unified_detection_20260929\\pair_refinement\\final_fit_lock.json": true
+  },
+  "manuscript_files_intentionally_modified_this_turn": {
+    "ESWA-round2\\DA-TGT.tex": {
+      "before": "f4ecc8ab5b384b76dbc6407828c37685cb0b353e450ed0c1d69127c09840f55b",
+      "after": "afbbf15e4fd6e4404361b17cd129a769db4f539889e2f9470dd4d85146d6cdcb"
+    },
+    "ESWA-round2\\DA-TGT-marked.tex": {
+      "before": "8fcdc44cb1be997df5a95288d0389c71d34a09e6378a11efbe89b240556c4a88",
+      "after": "93072f83ff771a2ab41469f9f6f13c7abc643834ad38903a4119d8194154afec"
+    },
+    "ESWA-round2\\response-to-reviewers.tex": {
+      "before": "6a7c95eb89d1460e7fd2b49d5c8dd9491dba38e99be5de085a275e5c0ed1aebe",
+      "after": "f1765f23f2ffe6e36e85c34599fef2aed2ee7d8188bd2b99b658b8157d22976b"
+    }
+  },
+  "results_sha256": "415c34f5fcf84f4503f379effd2f5dc95a9749474bf28681d33affffa68c06ef",
+  "full_pipeline_diagnostic_sha256": "13e18911cdc24678687080d8015a047ddfd04f0c82a77d1a159355083874e913",
+  "source_sha256": "ad623bd54e6f1b0fd67e08668de5d770689765a5127f680faf95d79354a08f55",
+  "verifier_sha256": "bf9ab56405b821321e96abcc3243f9cfa75f71a0b11d07deb2162ca9c7d051d7"
+}

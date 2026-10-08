@@ -1,0 +1,23 @@
+{
+  "all_passed": true,
+  "preserved_files": 17,
+  "hashes_checked": {
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\acceptance.json": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\predict.py": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\retained_runtime\\provenance\\predict_original.py": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\retained_runtime\\current_model.py": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\retained_runtime\\backbone.py": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\retained_runtime\\history_head.py": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\retained_runtime\\history.py": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\retained_runtime\\verification_before_cleanup.json": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\retained_runtime\\verification_after_cleanup.json": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\IGCPS\\head_seed0.joblib": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\IGCPS\\preprocessing.joblib": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\head_seed11.joblib": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\head_seed22.joblib": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\head_seed33.joblib": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\head_seed44.joblib": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\head_seed55.joblib": true,
+    "C:\\Users\\pcsys\\Documents\\Codex\\2026-08-25\\eswa\\detection_history_final_20260929\\TE-CUP-SEC\\preprocessing.joblib": true
+  }
+}

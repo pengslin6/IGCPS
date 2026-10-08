@@ -1,0 +1,80 @@
+{
+  "copied_source_files_verified": 102,
+  "python_files_parsed": 35,
+  "compact_f1_means_verified": 12,
+  "training_performed": false,
+  "inference_replay": [
+    {
+      "dataset": "IGCPS",
+      "seed": 11,
+      "inference_rows": 128,
+      "full_saved_rows": 951,
+      "macro_f1": 87.35228842375157
+    },
+    {
+      "dataset": "IGCPS",
+      "seed": 22,
+      "inference_rows": 128,
+      "full_saved_rows": 951,
+      "macro_f1": 88.60478085910025
+    },
+    {
+      "dataset": "IGCPS",
+      "seed": 33,
+      "inference_rows": 128,
+      "full_saved_rows": 951,
+      "macro_f1": 86.97123937902779
+    },
+    {
+      "dataset": "IGCPS",
+      "seed": 44,
+      "inference_rows": 128,
+      "full_saved_rows": 951,
+      "macro_f1": 89.7846407507202
+    },
+    {
+      "dataset": "IGCPS",
+      "seed": 55,
+      "inference_rows": 128,
+      "full_saved_rows": 951,
+      "macro_f1": 89.183968569102
+    },
+    {
+      "dataset": "TE-CUP-SEC",
+      "seed": 11,
+      "inference_rows": 128,
+      "full_saved_rows": 32775,
+      "macro_f1": 83.9617868731246
+    },
+    {
+      "dataset": "TE-CUP-SEC",
+      "seed": 22,
+      "inference_rows": 128,
+      "full_saved_rows": 32775,
+      "macro_f1": 85.4934868497469
+    },
+    {
+      "dataset": "TE-CUP-SEC",
+      "seed": 33,
+      "inference_rows": 128,
+      "full_saved_rows": 32775,
+      "macro_f1": 84.82873280178492
+    },
+    {
+      "dataset": "TE-CUP-SEC",
+      "seed": 44,
+      "inference_rows": 128,
+      "full_saved_rows": 32775,
+      "macro_f1": 85.0312998214575
+    },
+    {
+      "dataset": "TE-CUP-SEC",
+      "seed": 55,
+      "inference_rows": 128,
+      "full_saved_rows": 32775,
+      "macro_f1": 83.94388188559475
+    }
+  ],
+  "probability_and_node_score_absolute_tolerance": 1e-06,
+  "predicted_classes_identical": true
+}

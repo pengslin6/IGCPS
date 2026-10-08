@@ -1,0 +1,31 @@
+{
+  "all_passed": true,
+  "checks": [
+    {
+      "dataset": "IGCPS",
+      "split": "train",
+      "test_queries_excluded": true,
+      "test_history_excluded": true
+    },
+    {
+      "dataset": "IGCPS",
+      "split": "validation",
+      "test_queries_excluded": true,
+      "test_history_excluded": true
+    },
+    {
+      "dataset": "TE-CUP-SEC",
+      "split": "train",
+      "test_queries_excluded": true,
+      "test_history_excluded": true
+    },
+    {
+      "dataset": "TE-CUP-SEC",
+      "split": "validation",
+      "test_queries_excluded": true,
+      "test_history_excluded": true
+    }
+  ],
+  "igcps_scaler_training_only": true,
+  "igcps_raw_csv_parse_scope": "Whole input columns parsed before immediate development-row filtering; no label column parsed. Test rows did not enter feature matrices, vocabularies, scaler fitting, history context or model selection. This is not a never-parsed-test claim."
+}

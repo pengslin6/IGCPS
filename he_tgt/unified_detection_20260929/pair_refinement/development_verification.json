@@ -1,0 +1,9 @@
+{
+  "all_passed": true,
+  "candidate_dataset_pairs": 216,
+  "selected_all_pair_heads_refitted": 51,
+  "decision_verification": "separate scalar implementation",
+  "metric_verification": "sklearn",
+  "selection_sha256": "0b3e618b1d0598a7b9066f165e593525f804db1c4624836cb111b52e300f3d44",
+  "verifier_sha256": "c3bb23929ae3ec7c9a00d92696a49b59f9d0836afa50bfd92b1c05d374d72060"
+}

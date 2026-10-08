@@ -1,0 +1,16 @@
+{
+  "all_passed": true,
+  "datasets": {
+    "IGCPS": {
+      "prediction_files_checked": 10,
+      "row_count": 951,
+      "same_selected_policy_across_architectures": true
+    },
+    "TE-CUP-SEC": {
+      "prediction_files_checked": 10,
+      "row_count": 32775,
+      "same_selected_policy_across_architectures": true
+    }
+  },
+  "fixed_prediction_files": 20
+}

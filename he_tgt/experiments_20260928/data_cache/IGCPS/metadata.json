@@ -1,0 +1,146 @@
+{
+  "dataset": "IGCPS",
+  "source_path": "C:\\Users\\pcsys\\Desktop\\论文\\HGAN-Trace\\sr_com_causal_v2.csv",
+  "data_sha256": "6c8aaea31e4820fee7230ba35e04ce3907edaa5f5a56051cd5ec427d1f5998df",
+  "reference_policy": "igcps-ns-two-pressure-switches-v2-20260907",
+  "node_names": [
+    "IP_0.0.0.0",
+    "IP_00:0c:29:c5:74:d2",
+    "IP_00:1e:cd:63:5a:07",
+    "IP_00:a0:1d:5e:68:a4",
+    "IP_01:80:c2:00:00:00",
+    "IP_01:80:c2:00:00:0e",
+    "IP_10.0.11.1",
+    "IP_10.0.6.109",
+    "IP_10.0.6.118",
+    "IP_10.0.6.130",
+    "IP_10.0.6.30",
+    "IP_10.0.6.63",
+    "IP_10.255.255.255",
+    "IP_10.9.6.100",
+    "IP_10.9.6.28",
+    "IP_169.254.169.254",
+    "IP_192.168.0.1",
+    "IP_224.0.0.1",
+    "IP_224.0.0.2",
+    "IP_224.0.0.22",
+    "IP_224.0.0.251",
+    "IP_224.0.0.252",
+    "IP_239.255.255.250",
+    "IP_255.255.255.255",
+    "IP_4c:e7:05:17:00:94",
+    "IP_::",
+    "IP_fe80::1898:992:28b4:82f7",
+    "IP_fe80::62b:58ff:fe17:2e0c",
+    "IP_fe80::8939:3db6:203:5221",
+    "IP_fe80::acbe:d044:9278:2fba",
+    "IP_ff02::16",
+    "IP_ff02::1:2",
+    "IP_ff02::1:3",
+    "IP_ff02::1:ffb4:82f7",
+    "IP_ff02::2",
+    "IP_ff02::fb",
+    "Phy_Switch status of high pressure switch",
+    "Phy_Inlet pressure of high pressure sensor",
+    "Phy_Flow rate of high pressure skid flow sensor",
+    "Phy_Outlet pressure of high pressure sensor",
+    "Phy_Switch status of sub-high pressure switch",
+    "Phy_Switch status of medium pressure skid heater",
+    "Phy_Inlet temperature of medium pressure skid heater",
+    "Phy_Flow rate of sub-high pressure skid flow sensor",
+    "Phy_Outlet pressure of sub-high pressure skid sensor",
+    "Phy_Outlet temperature of sub-high pressure skid sensor",
+    "Phy_Flow rate of medium pressure skid flow sensor",
+    "Phy_Outlet temperature of medium pressure skid heater",
+    "Phy_Outlet temperature of medium pressure skid sensor",
+    "Phy_Outlet pressure of medium pressure skid sensor"
+  ],
+  "n_net": 36,
+  "n_nodes": 50,
+  "label_names": [
+    "Normal",
+    "NS",
+    "NM",
+    "PM",
+    "PS",
+    "SS"
+  ],
+  "reference_sets": [
+    {
+      "id": 0,
+      "node_indices": [],
+      "nodes": []
+    },
+    {
+      "id": 1,
+      "node_indices": [
+        8
+      ],
+      "nodes": [
+        "IP_10.0.6.118"
+      ]
+    },
+    {
+      "id": 2,
+      "node_indices": [
+        36,
+        40
+      ],
+      "nodes": [
+        "Phy_Switch status of high pressure switch",
+        "Phy_Switch status of sub-high pressure switch"
+      ]
+    },
+    {
+      "id": 3,
+      "node_indices": [
+        41,
+        42,
+        47,
+        48,
+        49
+      ],
+      "nodes": [
+        "Phy_Switch status of medium pressure skid heater",
+        "Phy_Inlet temperature of medium pressure skid heater",
+        "Phy_Outlet temperature of medium pressure skid heater",
+        "Phy_Outlet temperature of medium pressure skid sensor",
+        "Phy_Outlet pressure of medium pressure skid sensor"
+      ]
+    }
+  ],
+  "count_unit": "fused observation windows; independent incident identities are unavailable",
+  "split_counts": {
+    "all": 4741,
+    "train_full": 2842,
+    "validation_full": 948,
+    "development_full": 3790,
+    "test_full": 951,
+    "train": 2842,
+    "validation": 948,
+    "development": 3790,
+    "test": 951
+  },
+  "split_indices_sha256": {
+    "all": "75e254b695022f784e8e8ad2c808aaa30e87aee4da032706d4c516050a8cb7dc",
+    "train_full": "ec5e87ff07fcb7b511b9cade17053371b1f65c4bf273762e575d366367b25789",
+    "validation_full": "9303ac6ab3bf581c458132a788ad6135c513b176070e78b4a036f3d7600061e5",
+    "development_full": "3ef091df91c42c4f858c8c3389ebb1187e3ccf61ab1dc07777eae78e4ad53902",
+    "test_full": "42c1ffda2182f7dc970ab4546af754f8a8cb6be418d547b0eb00566dfab0c75c",
+    "train": "ec5e87ff07fcb7b511b9cade17053371b1f65c4bf273762e575d366367b25789",
+    "validation": "9303ac6ab3bf581c458132a788ad6135c513b176070e78b4a036f3d7600061e5",
+    "development": "3ef091df91c42c4f858c8c3389ebb1187e3ccf61ab1dc07777eae78e4ad53902",
+    "test": "42c1ffda2182f7dc970ab4546af754f8a8cb6be418d547b0eb00566dfab0c75c"
+  },
+  "code_sha256": {
+    "controlled_graph_revision.py": "b098f00a84bdd38a2adb9a0c87666c29255ce3e4b94acc2fed04bc6c724d61d2",
+    "graphsage_bias_calibration.py": "86b2d1e7189d495b18df60a08660a6c4545dc097d15f015b73a5edf4a47eac7f",
+    "hgan_conditional_calibration.py": "152a793d254be345017595adb27be07bd74baacf79a91c007faec0619a0c1157",
+    "reviewer_experiments.py": "59a584fecedde26871cc0265b82ceb9ef8329e96d65abeb4bde7a1b12a5f501b",
+    "single_hgan_joint_experiment.py": "036bc5e9af2bd1af20e8e0b975f2094ebe0bd415375df2050171dbe9b549bcc5",
+    "single_hgan_linear_calibration_validation.py": "79985da2bce2dda1fcb1ca18cd0288ad5eed19d83eaf9cbd66a7d8008429e238",
+    "single_hgan_shared_gat_experiment.py": "650fb1ca1a5a17861cdcab1dbee8efab67f750b533eab2482b9dcf118206c4b3",
+    "temporal_robust_experiments.py": "8824ec94179c747775df24419d64caf8cd3c12fa9858cc749093f2abea407117",
+    "trace.py": "a9c02e0acb249a59f2c0826f8fc61aefb17c9dd641aafc32f00ae8996d8a4bff"
+  }
+}
