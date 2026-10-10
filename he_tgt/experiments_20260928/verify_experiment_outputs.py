@@ -90,7 +90,7 @@ def verify(dataset):
     dump(HERE / "environment.json", {"python": platform.python_version(), "platform": platform.platform(),
         "packages": {name: version(name) for name in ("torch", "torch-geometric", "numpy", "pandas", "scipy", "scikit-learn")},
         "threads_per_fit": 2, "parallel_workers_per_dataset": 2,
-        "hardware_note": "CPU-only execution; elapsed fit times are not a controlled speed benchmark."})
+        "execution_scope": "Numerical replay; elapsed fit times are not a controlled inference-speed benchmark."})
     print(f"POST-RUN VERIFIED {dataset}: {len(records)} fits; all metrics, hashes, masks, selection locks, and test rows match", flush=True)
 
 

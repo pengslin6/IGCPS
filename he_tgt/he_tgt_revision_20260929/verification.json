@@ -1,8 +1,0 @@
-{
-  "full_probabilities_identical": true,
-  "raw_indices_and_labels_identical": true,
-  "source_sha256": "e33331a0a82e6adcddd26d69aefb114ee28ed84fcbd18d0ad53e00e9683011ed",
-  "metrics_sha256": "c023bcb047bb710efd2b5a9c85cc24651f7936474728fcc520c36f24c17dd369",
-  "selection_or_new_fits": false,
-  "historical_final_fit_lock_sha256": "53a9110684b1d4520bd3515b8407e7c2b969b98f13b00e268786455a5979f924"
-}

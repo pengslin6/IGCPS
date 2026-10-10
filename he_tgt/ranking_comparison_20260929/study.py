@@ -297,7 +297,7 @@ def fit_final():
         for p in [pair.OUT/d/'final_pairs.joblib',pair.OUT/d/'final_prior.joblib']:
             hashes[str(p)]=u.sha(p)
     if tasks:
-        # Separate spawned processes keep per-fit RNGs isolated on Windows.
+        # Separate spawned processes isolate each fit's random-number state.
         with ProcessPoolExecutor(max_workers=3) as executor:
             for path,digest in executor.map(fit_final_graph_task,tasks):
                 hashes[path]=digest

@@ -1,5 +1,3 @@
-# Historical DA-TGT reports
+# External experiment reports
 
-The TXT files in this directory were generated for the earlier DA-TGT model, using its recorded seed-11 protocol. They have not been regenerated as HE-TGT reports.
-
-Current HE-TGT code and per-seed metric summaries are under [`../he_tgt/`](../he_tgt/). See the [repository README](../README.md) for the model/version mapping and reproduction limits.
+Generated experiment summaries and sample-level reports have been removed from the current branch. They remain in the authors' local experiment records. This repository contains the source needed to generate outputs when the required external artifacts are supplied. See the [current documentation](../he_tgt/REPRODUCING.md).

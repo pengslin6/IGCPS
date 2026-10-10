@@ -1,68 +1,78 @@
-# Reproducing the locked HE-TGT pipeline
+# Reproducing the current no-node-head HE-TGT
 
-## Scope and environment
+## Versions and source scope
 
-The copied dated directories are historical sources and evidence. Their relative layout and bytes are preserved. Their original absolute paths and statements about then-unpublished code are historical provenance, not current release status. `SOURCE_SHA256.json` checks the copied files. The manuscript audit in the older ZIP is not a validation of subsequently edited manuscript files.
+The implementation uses the no-head graph fitted on 9 October 2026, the fixed multiclass-history bank and universal class-pair refinement. The graph exposes class logits only. The initializer retains the evaluated parameter-initialization order before removing the node scorer; no node-scoring parameters remain in the fitted model.
 
-The recorded experiment environment is Python 3.12.7, PyTorch 2.7.0, NumPy 1.26.4, pandas 2.2.2, SciPy 1.13.1 and scikit-learn 1.5.1. See `experiments_20260928/environment.json`. Pickled scikit-learn artifacts should be loaded with the matching versions. `requirements.txt` records known versions and lists the additional helper dependencies. The current release does not guarantee reproducibility on untested package versions or accelerators.
+`SOURCE_SHA256.json` records the published Python sources. Older dated files are preserved research code, not the current main entry. Their generated JSON summaries, histories, caches and sample-level reports are no longer distributed. `code/protocols/*.json` are executable configurations for historical baseline reproduction, not observation data.
 
-## Required external artifacts
+The verified software versions are Python 3.12.7, PyTorch 2.7.0, NumPy 1.26.4, pandas 2.2.2, SciPy 1.13.1 and scikit-learn 1.5.1. Additional packages are listed in `requirements.txt`. Serialized tree artifacts require compatible versions. New device/library combinations require their own numerical verification.
 
-Set `ARTIFACT_ROOT` to the original experiment workspace or an explicitly mapped copy with this layout:
+## External artifact layout
 
 ```text
 ARTIFACT_ROOT/
-  detection_history_final_20260929/
-    retained_runtime/assets/<dataset>/
+  experiments_20260928/
+    data_cache/<dataset>/
       metadata.json
       adjacency.pt
-      backbone_seed11.pt  (also 22, 33, 44, 55)
-    <dataset>/
-      preprocessing.joblib
-      test.npz
-      seed11.predictions.npz  (also 22, 33, 44, 55)
+      development.pt
+      test.pt
+    fair_control/<dataset>/
+      selection_lock.json
+      final__DA-TGT__seed11.pt
+      final__DA-TGT__seed11.predictions.npz
+      ... (also seeds 22, 33, 44, 55)
+  detection_history_final_20260929/<dataset>/
+    test.npz
   unified_detection_20260929/pair_refinement/
     final_fit_lock.json
     <dataset>/
-      final_pairs.joblib
       final_prior.joblib
-      final_seed11.npz  (also 22, 33, 44, 55)
-  experiments_20260928/data_cache/<dataset>/
-    test.pt
-    development.pt
-    metadata.json
+      final_pairs.joblib
+      final_seed11.npz
+      ... (also seeds 22, 33, 44, 55)
+
+CHECKPOINT_ROOT/<dataset>/
+  no_head_seed11.pt
+  ... (also seeds 22, 33, 44, 55)
+  without_head_seed11.predictions.npz
+  ... (saved outputs are needed only for replay verification)
 ```
 
-Datasets are `IGCPS` and `TE-CUP-SEC`. Inference needs the graph assets, fitted pair/prior banks, lock and supplied input arrays. Verification additionally needs test caches and retained predictions. The original full evaluator also needs archived DA-TGT predictions and the artifacts named in its source and historical locks.
+Datasets are `IGCPS` and `TE-CUP-SEC`. Inference needs metadata, adjacency, the requested no-head checkpoint and history banks, the history policy lock, and input arrays. The reference table is fitted from eligible development labels during initialization. Alternatively, supply a previously exported development-fitted table with `--reference-table`; this avoids loading the development cache at inference initialization. Never fit this table from test/query labels.
 
-The graph tensor must follow the recorded node inventory, feature layout and fitting-only transforms. The history NPZ must contain aligned `static` and `history` arrays generated with the fitted preprocessing and `history.make_history`. Inference accepts no class or reference labels. Supplying already prepared arrays does not verify raw capture synchronization; that audit is a separate data-preparation step.
+Input graphs must use the fitted feature transforms, node order and topology. The history NPZ contains aligned `static` and `history` arrays constructed by `history.make_history`. Query labels are not inference inputs. Passing prepared arrays does not regenerate or validate raw synchronization.
+
+## Inference
 
 ```bash
-python he_tgt/run_he_tgt.py --artifact-root ARTIFACT_ROOT --dataset IGCPS --seed 11 --graph GRAPH.pt --history HISTORY.npz --output predictions.npz
+python he_tgt/run_he_tgt.py --artifact-root ARTIFACT_ROOT --checkpoint-root CHECKPOINT_ROOT --dataset IGCPS --seed 11 --graph GRAPH.pt --history HISTORY.npz --output predictions.npz
 ```
 
-`run_he_tgt.py` uses the published source and the separately supplied artifacts. It leaves the historical lock files unchanged, checks the manuscript's fixed coefficients, and refuses to overwrite an output. It does not invoke the dataset-specific `current_model.predict` policies.
+`--device` selects a PyTorch device; `auto` selects an available supported accelerator or the default host device. The fixed tree classifiers use their retained library implementation. The output includes final probabilities/classes, graph probabilities, lookup scores and reference order. It contains no learned node-head scores. Existing output files are not overwritten.
 
-## Verify the release
+## Source and numerical verification
 
 ```bash
-# No model assets: source hashes, syntax and compact metric means.
 python he_tgt/verify_release.py
-
-# With retained assets: 128 evenly spaced test rows for every dataset/seed,
-# graph+history inference against saved outputs, and full saved-array macro F1.
-python he_tgt/verify_release.py --artifact-root ARTIFACT_ROOT --output verification.json
+python he_tgt/verify_release.py --artifact-root ARTIFACT_ROOT --checkpoint-root CHECKPOINT_ROOT --output external-verification.json
 ```
 
-The runtime check uses both datasets and all five graph seeds. It requires exact predicted classes and probabilities/node scores within 1e-6. It also reconstructs the full saved-array macro F1. It is an inference replay, not retraining, full raw-data regeneration or independent-event validation. `publication_verification.json` records the checks performed for this release.
+The optional replay checks 128 evenly spaced retained test rows per dataset and graph seed against the saved no-head outputs, requires identical predicted classes, and checks probabilities and lookup scores within absolute tolerance 1e-6. It also recomputes full saved-array macro F1. This is numerical replay, not retraining or an independent dataset experiment. Keep generated reports outside version control.
 
-## Training and main evaluation provenance
+## Refit and evaluate the deletion study
 
-1. `experiments_20260928/common.py` prepares the chronological graph data; the original fused CSV paths and hashes are recorded in its `DATA` mapping. `code/` at repository root holds the fusion implementations.
-2. `experiments_20260928/fair_control.py` fits the matched graph models. Dataset-specific selected graph settings are retained under `fair_control/<dataset>/selection_lock.json`.
-3. `unified_detection_20260929/unified.py` constructs history features and the multiclass tree branch. `pair_model.py` fits/refines all unordered class pairs. Read `PROTOCOL.md`, `PAIR_PROTOCOL.md` and `pair_refinement/selection_lock.json` before attempting to reproduce the historical selection.
-4. `he_tgt_revision_20260929/evaluate_revision.py` reconstructs the six fixed configurations, ranking lookup and subgroup results using saved artifacts; its `metrics.json` contains the full published evidence snapshot.
+Use a **new** `RUN_ROOT` and the external former-model/reference artifacts listed above:
 
-The old research scripts preserve workspace-specific paths and hash locks; they are not advertised as one-command training from a fresh clone. Relocation requires an explicit data/artifact path map. Never overwrite a historical lock merely to make a rerun pass. A new fit should get a new output directory and new provenance.
+```bash
+python he_tgt/no_head_20261009/experiment.py prepare --artifact-root ARTIFACT_ROOT --output-root RUN_ROOT
+python he_tgt/no_head_20261009/experiment.py train_all --artifact-root ARTIFACT_ROOT --output-root RUN_ROOT
+python he_tgt/no_head_20261009/experiment.py evaluate --artifact-root ARTIFACT_ROOT --output-root RUN_ROOT
+```
 
-The later `information_matched_full_20260930` experiment changes the history coefficient to 0.50 only in its equal-budget sensitivity analysis. The current manuscript model and launcher remain at 0.25.
+Training uses only development graph caches and inherited settings: IGCPS 0.002/17 epochs; TE-CUP-SEC 0.0007/16 epochs. The script verifies the no-head forward against the corresponding decoupled classifier and locks all ten fitted checkpoints before test evaluation. Historical history banks are held fixed, as in the reported study. This command does not claim to rerun all baseline searches or refit every pipeline component.
+
+History construction/fitting is implemented in `unified_detection_20260929/unified.py` and `pair_model.py`. Raw graph preparation is in `experiments_20260928/common.py`; older research preparation scripts require an explicit source-data path map. Read the accompanying protocols before reproducing those stages. Do not overwrite original locks to make a rerun pass; create fresh outputs.
+
+Fitting duration, graph operation counts and inference latency are different quantities. A benchmark must separately state its prepared-input scope, included history processing, warm-up, repeats, precision, threads and actual device. Numerical accuracy results do not establish a runtime measurement.

@@ -18,7 +18,7 @@ The experiment is retrospective. Previous temporal-tail inspection is not undone
 - **History-only detection is stronger than full HE-TGT** in macro F1: 92.18% and 91.11%. The manuscript does not claim fusion superiority.
 - The final-probability reference lookup exceeds the learned node head in all three aggregate ranking means on both datasets. Reference labels are fixed within every eligible class and do not independently identify causal initiators.
 - Five seeds vary graph fitting only. One fixed history/pair-tree bank is reused per dataset. History-only scores therefore have no graph-seed standard deviation.
-- Old graph-only CPU timings and label-scarcity results remain explicitly historical. No complete HE-TGT/Jetson latency or HE-TGT label-budget experiment is claimed.
+- Earlier graph-only timing and label-scarcity routines are historical and separate from the current no-head inference entry.
 
 ## Contents and reproduction
 

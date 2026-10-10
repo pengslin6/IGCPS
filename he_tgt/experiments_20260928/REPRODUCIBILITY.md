@@ -6,9 +6,10 @@ the original dataset files, archived models or DA-TGT architecture.
 
 ## Inputs and environment
 
-`environment.json` records the actual Python and library versions. The runs used
-PyTorch CPU execution with two threads per fit. Some independent fits were
-scheduled concurrently; their wall times are not controlled speed measurements.
+The externally retained `environment.json` records the actual runtime and library
+versions. Fits used two threads; some independent fits were scheduled concurrently.
+Their wall times are not controlled inference-speed measurements. This historical
+audit is separate from the current no-head inference entry.
 
 Two fusion CSVs are required, with exact SHA-256 values specified in `common.py`:
 
@@ -21,7 +22,7 @@ their result files and the IGCPS calibration locks/prediction files. These origi
 inputs are not distributed inside the compact evidence supplement. Their local
 source locations and hashes are recorded in the metadata and verification files.
 
-On this workstation, `SOURCE` in `common.py` points to the original experimental
+In the retained setup, `SOURCE` in `common.py` points to the original experimental
 folder. For a fresh reproduction elsewhere, place the input files under an
 appropriate folder and set `SOURCE` before starting, in a separate working copy
 without completed-run manifests. Do not alter source paths or training code and
@@ -55,7 +56,7 @@ is restarted from its stated seed rather than resumed from an incomplete optimiz
 state. The restarted IGCPS DT-GNN seed-22 losses matched all 15 recorded serial
 epochs; this is recorded in `postrun_verification.json`.
 
-## Evidence files
+## External evidence files (not distributed in this source-only branch)
 
 - `data_cache/<dataset>/label_statistics.csv`: full and partition-specific class
   counts, eligible counts, distinct reference sets, modal shares, entropy, and

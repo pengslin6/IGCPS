@@ -1,47 +1,35 @@
 # HE-TGT: History-Enhanced Type Graph Transformer
 
-Code for **HE-TGT: A History-Enhanced Type Graph Transformer for Anomaly Detection and Reference-Node Ranking in Industrial Cyber–Physical Systems**. Source release: 8 October 2026.
+Source code for **HE-TGT: A History-Enhanced Type Graph Transformer for Anomaly Detection and Reference-Node Ranking in Industrial Cyber–Physical Systems**. Current source revision: **10 October 2026**.
 
-The manuscript source retains the filename `DA-TGT.tex`, but its current method is HE-TGT. The implementation is the locked **universal class-pair pipeline**, not the later experimental `HistoryJoint` model and not the dataset-specific retained detection policies.
+The current manuscript is `HE-TGT.tex`. Its graph backbone has **no learned node-scoring head or node-supervised loss**. Detection uses a typed graph Transformer, fixed history refinement and a development-fitted class-to-reference lookup. Earlier dated implementations remain available as historical comparison code.
 
-## Which code implements the current paper?
+## Current implementation
 
-| Role | File |
+| Role | Source |
 |---|---|
-| Inference entry used by the experiments | [`he_tgt/unified_detection_20260929/predict_pair.py`](he_tgt/unified_detection_20260929/predict_pair.py) |
-| All-class-pair fitting and probability refinement | [`pair_model.py`](he_tgt/unified_detection_20260929/pair_model.py) |
-| Multiclass history fitting and feature selection | [`unified.py`](he_tgt/unified_detection_20260929/unified.py) |
-| Typed graph encoder, `DATGTJoint` | [`backbone.py`](he_tgt/detection_history_final_20260929/retained_runtime/backbone.py) |
+| Current inference entry | [`he_tgt/run_he_tgt.py`](he_tgt/run_he_tgt.py) |
+| No-head graph definition | [`model.py`](he_tgt/no_head_20261009/model.py) |
+| Graph/history inference and reference lookup | [`runtime.py`](he_tgt/no_head_20261009/runtime.py) |
+| Five-seed graph refits and former-model replay | [`experiment.py`](he_tgt/no_head_20261009/experiment.py) |
 | Strictly past history construction | [`history.py`](he_tgt/detection_history_final_20260929/retained_runtime/history.py) |
-| Matched graph training | [`fair_control.py`](he_tgt/experiments_20260928/fair_control.py) |
-| Main results, ablations and reference lookup | [`evaluate_revision.py`](he_tgt/he_tgt_revision_20260929/evaluate_revision.py), [`metrics.json`](he_tgt/he_tgt_revision_20260929/metrics.json) |
-| Portable inference entry with an explicit asset location | [`run_he_tgt.py`](he_tgt/run_he_tgt.py) |
+| Multiclass history features and fitting | [`unified.py`](he_tgt/unified_detection_20260929/unified.py) |
+| Universal class-pair fitting/refinement | [`pair_model.py`](he_tgt/unified_detection_20260929/pair_model.py) |
+| Source and inference verification | [`verify_release.py`](he_tgt/verify_release.py) |
 
-The original source files are copied byte-for-byte; [`SOURCE_SHA256.json`](he_tgt/SOURCE_SHA256.json) records their hashes. The new launcher only redirects artifact paths. `current_model.load_backbone` is reused by HE-TGT; `current_model.predict` implements an older dataset-specific policy and **is not the HE-TGT entry point**. The old `code/single_hgan_joint_experiment.py` alone is not the complete current model.
+History uses at most eight strictly earlier observations from the same directed endpoint pair within 30 seconds. Equal-time observations cannot enter one another's histories. The fixed history weight is 0.25, pair-tree weight 1.0, and pair-refinement strength 0.5. Final class probabilities, rather than learned node scores, determine the reference ranking. Reference sets are scenario-derived investigation targets; they do not independently identify causal initiators.
 
-## Method and evidence
+## Which results were newly computed?
 
-HE-TGT uses a current typed graph, at most eight strictly earlier observations from the same directed endpoint pair within 30 seconds, a multiclass boosted-tree history classifier, and universal class-pair refinement. Equal-time observations cannot enter one another's histories. The locked rule uses history weight 0.25, pair-tree weight 1.0, and refinement strength 0.5 on both datasets. The graph branch supplies the node scores; the history stages change classification probabilities only.
+The 9 October study fitted ten new no-head graph models: two datasets with five graph seeds each. Multiclass history and class-pair banks were kept fixed. The ten former graph checkpoints were replayed, and the nine detection baselines retain their earlier fits. Updated detection/ranking metrics, component removals, confusion matrices and calibration diagnostics derive from the new no-head predictions. This does not constitute a new acquisition or a full refit of every component.
 
-| Dataset | Archived DA-TGT macro F1 | HE-TGT macro F1 | History-only macro F1 | HE-TGT focus recall | Node-head / lookup Top-1 |
-|---|---:|---:|---:|---:|---:|
-| IGCPS | 78.31% | 88.38% | **92.18%** | NM: 41.58% | 90.16% / 93.97% |
-| TE-CUP-SEC | 80.77% | 84.65% | **91.11%** | Attack6: 24.31% | 82.01% / 84.67% |
+This source release and numerical replay do not establish device-latency or peak-memory measurements. Parameter reduction alone is not a latency measurement.
 
-These results are retrospective on previously inspected temporal tails. Five seeds vary graph fitting; one fixed tree bank is reused per dataset. History-only is stronger in macro F1 on both datasets, and the class-probability lookup is stronger than the learned node head. Reference sets are fixed within eligible classes and do not independently identify causal initiators. The `history_only` entries in the generic metrics file retain incidental graph-ranking diagnostics; those fields are not a history-only node head.
+## Source-only distribution
 
-The compact evidence snapshot retains the complete historical evaluator output. The manuscript's component-removal table uses the graph backbone, graph/history blend, pair-only refinement and complete model, plus archived DA-TGT. This release does not change the manuscript or select a new model.
+Raw/fused observations, graph/history caches, checkpoints, fitted tree banks, prediction arrays, experiment result summaries and sample-level reports are excluded from the current branch. Necessary source configurations and a code-hash manifest remain. Local experiment records are retained separately; removal from the current branch does not rewrite Git history.
 
-Additional experiments are clearly separated from main results:
-
-- [`node_head_ablation_20260930`](he_tgt/node_head_ablation_20260930/RESULTS.md): validation-only node-head removal and fixed-pipeline diagnostics used in the response letter.
-- [`information_matched_full_20260930`](he_tgt/information_matched_full_20260930/RESULTS.md): later history-branch transfer and equal final-policy-budget sensitivity. The alternative backbone does not uniformly lose to HE-TGT. These results were not substituted into the main manuscript.
-
-Historical graph-only CPU timings do not measure the complete HE-TGT pipeline. This release makes no HE-TGT Jetson, full-system latency, causal-path recovery, or independent-event generalization claim.
-
-## Run and reproduce
-
-See [`he_tgt/REPRODUCING.md`](he_tgt/REPRODUCING.md) for dependencies, artifact layout, inference and verification. This is a **source and compact evidence release**, not a pretrained-model or raw-data release. Raw/fused data, checkpoints, tree banks and large prediction arrays are not included. Full reproduction requires those separately retained artifacts and the recorded preprocessing. Missing artifacts cannot be replaced by the JSON summaries.
+See [`he_tgt/REPRODUCING.md`](he_tgt/REPRODUCING.md) for external artifact layout and commands. Missing trained artifacts cannot be reconstructed from code hashes. Use matching library versions for serialized tree models.
 
 ```bash
 python -m pip install -r he_tgt/requirements.txt
@@ -49,8 +37,8 @@ python he_tgt/verify_release.py
 python he_tgt/run_he_tgt.py --help
 ```
 
-## Earlier DA-TGT resources
+## Historical implementations and data preparation
 
-The existing [`code/`](code/), [`reports/`](reports/) and [`protocol_manifest_20260831.json`](protocol_manifest_20260831.json) are retained historical DA-TGT resources. In particular, their sample-level reports are **not new HE-TGT predictions**. See the preserved [DA-TGT README](docs/DA-TGT-README-20260909.txt) for that protocol.
+The [`code/`](code/) directory contains the earlier graph-baseline adapters and the [IGCPS](code/build_igcps_causal_fusion.py) and [TE-CUP-SEC](code/build_tecupsec_causal_fusion.py) past-only fusion scripts. The [historical protocol description](docs/DA-TGT-README-20260909.txt) records the earlier data preparation. Older dated directories under `he_tgt/` are research implementations; they are not the current inference entry and may require separately retained artifacts. Their output files have been removed from the current branch.
 
-Past-only fusion remains in [`build_igcps_causal_fusion.py`](code/build_igcps_causal_fusion.py) and [`build_tecupsec_causal_fusion.py`](code/build_tecupsec_causal_fusion.py). TE-CUP-SEC source links remain in the historical README. No manuscript files, raw captures or fused CSV files are distributed here.
+The main comparison is between complete detection pipelines. The no-head graph study inherits the recorded learning rates and epoch counts; history trees remain fixed across graph seeds. Previously inspected temporal tails support retrospective evaluation under the stated partitions.
