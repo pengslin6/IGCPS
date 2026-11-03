@@ -1,2 +1,7 @@
-# Preserve byte-for-byte hashes of the historical source snapshot on Windows.
-he_tgt/** -text
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+requirements.txt text eol=lf

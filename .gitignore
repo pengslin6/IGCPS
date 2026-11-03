@@ -1,7 +1,9 @@
 __pycache__/
 *.py[cod]
-
-# This repository distributes source and configuration, not experiment data.
+.venv/
+data/
+runs/
+artifacts/
 *.csv
 *.tsv
 *.xlsx
@@ -20,14 +22,7 @@ __pycache__/
 *.parquet
 *.zip
 *.log
+*.pdf
+*.png
 *.json
-!code/protocols/IGCPS.json
-!code/protocols/TE-CUP-SEC.json
-!he_tgt/SOURCE_SHA256.json
-**/data_cache/
-**/assets/
-**/outputs/
-**/results/
-reports/*.txt
-**/RESULTS.md
-**/EVIDENCE_REPORT.md
+!configs/*.json

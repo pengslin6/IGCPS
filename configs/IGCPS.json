@@ -1,0 +1,68 @@
+{
+  "dataset": "IGCPS",
+  "fusion_csv": "sr_com_causal_v2.csv",
+  "fusion_csv_sha256": "6C8AAEA31E4820FEE7230BA35E04CE3907EDAA5F5A56051CD5EC427D1F5998DF",
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "baseline_lock": {
+    "selected_recency_strength": 1.0
+  },
+  "baseline_epochs": [
+    {
+      "model": "GCN-AE",
+      "best_epoch": 8
+    },
+    {
+      "model": "GAT-AE",
+      "best_epoch": 8
+    },
+    {
+      "model": "VGAE",
+      "best_epoch": 6
+    },
+    {
+      "model": "GraphSAGE-AE",
+      "best_epoch": 6
+    },
+    {
+      "model": "IIoT-GNN",
+      "best_epoch": 7
+    },
+    {
+      "model": "EE-GCN",
+      "best_epoch": 8
+    },
+    {
+      "model": "STGaAN",
+      "best_epoch": 4
+    },
+    {
+      "model": "STCI",
+      "best_epoch": 8
+    },
+    {
+      "model": "DT-GNN",
+      "best_epoch": 8
+    }
+  ],
+  "caps_per_class": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "graph": {
+    "learning_rate": 0.002,
+    "epochs": 17,
+    "recency_strength": 1.0
+  },
+  "policy": {
+    "gamma": 0.25,
+    "beta": 1.0,
+    "rho": 0.5
+  }
+}
